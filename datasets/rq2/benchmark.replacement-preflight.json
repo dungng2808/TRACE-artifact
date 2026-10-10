@@ -1,0 +1,37 @@
+{
+  "studyDesign": {
+    "studyId": "RQ2-REPLACEMENT-PREFLIGHT",
+    "selectionMethod": "Replacement candidate for the one preflight-excluded unit in the 100-unit descriptive evaluation.",
+    "selectionSeed": 20260814
+  },
+  "tasks": [
+    {
+      "taskId": "D4J-JSOUP-44-31",
+      "projectId": "Jsoup",
+      "datasetId": "LIBRO-DEFECTS4J",
+      "artifactId": "Jsoup_44_n31.txt",
+      "independenceUnitId": "Jsoup#44",
+      "samplingStratum": "fixed-compile-error",
+      "sourceUri": "https://github.com/jhy/jsoup/issues/552",
+      "fixedRevision": "3a7f39c507ed2b6809dc3a8bcc0a28ad19aab2f3",
+      "buggyRevision": "ec608674d877d2e906cab77bb09ecb2494167f0e",
+      "repositoryPath": "r/001f",
+      "buggyRepositoryPath": "r/001b",
+      "scenarioId": "Jsoup-44-scenario",
+      "testId": "Jsoup_44_n31.txt",
+      "failingTestMethod": "testInvalidTableContents",
+      "scenarioSpecification": "Replacement candidate retained verbatim in benchmark.structural-ready.json; this preflight file only validates build and oracle readiness.",
+      "traceabilityLink": "Jsoup-44-scenario -> Jsoup_44_n31.txt",
+      "initialEvidence": "LIBRO recorded fixed-compile-error for Jsoup_44_n31.txt on the fixed revision.",
+      "testFilePath": "src/test/java/org/jsoup/nodes/TestAutoGen.java",
+      "testClassName": "org.jsoup.nodes.TestAutoGen",
+      "modulePath": "",
+      "buildSystem": "maven",
+      "focalSourceFiles": ["src/main/java/org/jsoup/parser/TreeBuilder.java"],
+      "previouslyVerifiedTests": [],
+      "coverageReportPath": "target/site/jacoco/jacoco.xml",
+      "mutationReportPath": "target/pit-reports/mutations.xml",
+      "javaHome": "D:\\Ky9\\Experiment\\external-datasets\\toolchains\\temurin8\\jdk8u502-b07"
+    }
+  ]
+}

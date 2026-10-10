@@ -1,0 +1,153 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-COLLECTIONS-09",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-COLLECTIONS-09",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Collections-1f",
+                                           "project":  "Collections",
+                                           "repository_url":  "https://github.com/apache/commons-collections.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "f8aa3e033c1fde4a434864f666315b433498d32c"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.collections.map.TestFlat3Map::testEntryIteratorSetValue2",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-COLLECTIONS-base-test.java",
+                                          "artifact_sha256":  "7effb3d9c8ea462ef217955214ca9a728ac423ec7640ce2df52efd7fe892978f"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.collections.map.Flat3Map",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "The test verifies that calling setValue on a Map.Entry obtained from the entrySet iterator of a Flat3Map updates the underlying map correctly. The test adds three entries, iterates to the second entry, sets its value, and checks that the map size remains 3 and that the correct values are associated with each key.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.collections.map.TestFlat3Map::testEntryIteratorSetValue2.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.collections.map.Flat3Map"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2",
+                        "context_redactions":  [
+                                                   {
+                                                       "field":  "related_method_context",
+                                                       "status":  "INTENTIONALLY_REDACTED",
+                                                       "reason":  "Selective-verification abstention case"
+                                                   }
+                                               ]
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.collections.map.TestFlat3Map::testEntryIteratorSetValue2",
+                           "source_text":  "/*\n *  Copyright 2001-2004 The Apache Software Foundation\n *\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n */\npackage org.apache.commons.collections.map;\n\nimport java.io.ByteArrayInputStream;\nimport java.io.ByteArrayOutputStream;\nimport java.io.ObjectInputStream;\nimport java.io.ObjectOutputStream;\nimport java.util.Iterator;\nimport java.util.Map;\n\nimport junit.framework.Test;\nimport junit.textui.TestRunner;\n\nimport org.apache.commons.collections.BulkTest;\nimport org.apache.commons.collections.MapIterator;\nimport org.apache.commons.collections.iterators.AbstractTestMapIterator;\n\n/**\n * JUnit tests.\n * \n * @version $Revision$ $Date$\n * \n * @author Stephen Colebourne\n */\npublic class TestFlat3Map extends AbstractTestIterableMap {\n\n    private static final Integer ONE = new Integer(1);\n    private static final Integer TWO = new Integer(2);\n    private static final Integer THREE = new Integer(3);\n    private static final String TEN = \"10\";\n    private static final String TWENTY = \"20\";\n    private static final String THIRTY = \"30\";\n        \n    public TestFlat3Map(String testName) {\n        super(testName);\n    }\n\n    public static void main(String[] args) {\n        TestRunner.run(suite());\n    }\n    \n    public static Test suite() {\n        return BulkTest.makeSuite(TestFlat3Map.class);\n    }\n\n    public Map makeEmptyMap() {\n        return new Flat3Map();\n    }\n\n    //-----------------------------------------------------------------------\n    public void testEquals1() {\n        Flat3Map map1 = new Flat3Map();\n        map1.put(\"a\", \"testA\");\n        map1.put(\"b\", \"testB\");\n        Flat3Map map2 = new Flat3Map();\n        map2.put(\"a\", \"testB\");\n        map2.put(\"b\", \"testA\");\n        assertEquals(false, map1.equals(map2));\n    }\n\n    public void testEquals2() {\n        Flat3Map map1 = new Flat3Map();\n        map1.put(\"a\", \"testA\");\n        map1.put(\"b\", \"testB\");\n        Flat3Map map2 = new Flat3Map();\n        map2.put(\"a\", \"testB\");\n        map2.put(\"c\", \"testA\");\n        assertEquals(false, map1.equals(map2));\n    }\n\n    public void testClone2() {\n        Flat3Map map = new Flat3Map();\n        assertEquals(0, map.size());\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        assertEquals(2, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertSame(TEN, map.get(ONE));\n        assertSame(TWENTY, map.get(TWO));\n\n        // clone works (size = 2)        \n        Flat3Map cloned = (Flat3Map) map.clone();\n        assertEquals(2, cloned.size());\n        assertEquals(true, cloned.containsKey(ONE));\n        assertEquals(true, cloned.containsKey(TWO));\n        assertSame(TEN, cloned.get(ONE));\n        assertSame(TWENTY, cloned.get(TWO));\n        \n        // change original doesn\u0027t change clone\n        map.put(TEN, ONE);\n        map.put(TWENTY, TWO);\n        assertEquals(4, map.size());\n        assertEquals(2, cloned.size());\n        assertEquals(true, cloned.containsKey(ONE));\n        assertEquals(true, cloned.containsKey(TWO));\n        assertSame(TEN, cloned.get(ONE));\n        assertSame(TWENTY, cloned.get(TWO));\n    }        \n    public void testClone4() {\n        Flat3Map map = new Flat3Map();\n        assertEquals(0, map.size());\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(TEN, ONE);\n        map.put(TWENTY, TWO);\n        \n        // clone works (size = 4)\n        Flat3Map cloned = (Flat3Map) map.clone();\n        assertEquals(4, map.size());\n        assertEquals(4, cloned.size());\n        assertEquals(true, cloned.containsKey(ONE));\n        assertEquals(true, cloned.containsKey(TWO));\n        assertEquals(true, cloned.containsKey(TEN));\n        assertEquals(true, cloned.containsKey(TWENTY));\n        assertSame(TEN, cloned.get(ONE));\n        assertSame(TWENTY, cloned.get(TWO));\n        assertSame(ONE, cloned.get(TEN));\n        assertSame(TWO, cloned.get(TWENTY));\n        \n        // change original doesn\u0027t change clone\n        map.clear();\n        assertEquals(0, map.size());\n        assertEquals(4, cloned.size());\n        assertEquals(true, cloned.containsKey(ONE));\n        assertEquals(true, cloned.containsKey(TWO));\n        assertEquals(true, cloned.containsKey(TEN));\n        assertEquals(true, cloned.containsKey(TWENTY));\n        assertSame(TEN, cloned.get(ONE));\n        assertSame(TWENTY, cloned.get(TWO));\n        assertSame(ONE, cloned.get(TEN));\n        assertSame(TWO, cloned.get(TWENTY));\n    }\n    \n    public void testSerialisation0() throws Exception {\n        Flat3Map map = new Flat3Map();\n        ByteArrayOutputStream bout = new ByteArrayOutputStream();\n        ObjectOutputStream out = new ObjectOutputStream(bout);\n        out.writeObject(map);\n        byte[] bytes = bout.toByteArray();\n        out.close();\n        ByteArrayInputStream bin = new ByteArrayInputStream(bytes);\n        ObjectInputStream in = new ObjectInputStream(bin);\n        Flat3Map ser = (Flat3Map) in.readObject();\n        in.close();\n        assertEquals(0, map.size());\n        assertEquals(0, ser.size());\n    }\n    \n    public void testSerialisation2() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        \n        ByteArrayOutputStream bout = new ByteArrayOutputStream();\n        ObjectOutputStream out = new ObjectOutputStream(bout);\n        out.writeObject(map);\n        byte[] bytes = bout.toByteArray();\n        out.close();\n        ByteArrayInputStream bin = new ByteArrayInputStream(bytes);\n        ObjectInputStream in = new ObjectInputStream(bin);\n        Flat3Map ser = (Flat3Map) in.readObject();\n        in.close();\n        assertEquals(2, map.size());\n        assertEquals(2, ser.size());\n        assertEquals(true, ser.containsKey(ONE));\n        assertEquals(true, ser.containsKey(TWO));\n        assertEquals(TEN, ser.get(ONE));\n        assertEquals(TWENTY, ser.get(TWO));\n    }\n    \n    public void testSerialisation4() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(TEN, ONE);\n        map.put(TWENTY, TWO);\n        \n        ByteArrayOutputStream bout = new ByteArrayOutputStream();\n        ObjectOutputStream out = new ObjectOutputStream(bout);\n        out.writeObject(map);\n        byte[] bytes = bout.toByteArray();\n        out.close();\n        ByteArrayInputStream bin = new ByteArrayInputStream(bytes);\n        ObjectInputStream in = new ObjectInputStream(bin);\n        Flat3Map ser = (Flat3Map) in.readObject();\n        in.close();\n        assertEquals(4, map.size());\n        assertEquals(4, ser.size());\n        assertEquals(true, ser.containsKey(ONE));\n        assertEquals(true, ser.containsKey(TWO));\n        assertEquals(true, ser.containsKey(TEN));\n        assertEquals(true, ser.containsKey(TWENTY));\n        assertEquals(TEN, ser.get(ONE));\n        assertEquals(TWENTY, ser.get(TWO));\n        assertEquals(ONE, ser.get(TEN));\n        assertEquals(TWO, ser.get(TWENTY));\n    }\n\n    //-----------------------------------------------------------------------\n    public void testEntryIteratorSetValue1() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        Iterator it = map.entrySet().iterator();\n        Map.Entry entry = (Map.Entry) it.next();\n        entry.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(\"NewValue\", map.get(ONE));\n        assertEquals(TWENTY, map.get(TWO));\n        assertEquals(THIRTY, map.get(THREE));\n    }\n\n    public void testEntryIteratorSetValue2() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        Iterator it = map.entrySet().iterator();\n        it.next();\n        Map.Entry entry = (Map.Entry) it.next();\n        entry.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(TEN, map.get(ONE));\n        assertEquals(\"NewValue\", map.get(TWO));\n        assertEquals(THIRTY, map.get(THREE));\n    }\n\n    public void testEntryIteratorSetValue3() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        Iterator it = map.entrySet().iterator();\n        it.next();\n        it.next();\n        Map.Entry entry = (Map.Entry) it.next();\n        entry.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(TEN, map.get(ONE));\n        assertEquals(TWENTY, map.get(TWO));\n        assertEquals(\"NewValue\", map.get(THREE));\n    }\n\n    //-----------------------------------------------------------------------\n    public void testMapIteratorSetValue1() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        MapIterator it = map.mapIterator();\n        it.next();\n        it.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(\"NewValue\", map.get(ONE));\n        assertEquals(TWENTY, map.get(TWO));\n        assertEquals(THIRTY, map.get(THREE));\n    }\n\n    public void testMapIteratorSetValue2() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        MapIterator it = map.mapIterator();\n        it.next();\n        it.next();\n        it.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(TEN, map.get(ONE));\n        assertEquals(\"NewValue\", map.get(TWO));\n        assertEquals(THIRTY, map.get(THREE));\n    }\n\n    public void testMapIteratorSetValue3() throws Exception {\n        Flat3Map map = new Flat3Map();\n        map.put(ONE, TEN);\n        map.put(TWO, TWENTY);\n        map.put(THREE, THIRTY);\n        \n        MapIterator it = map.mapIterator();\n        it.next();\n        it.next();\n        it.next();\n        it.setValue(\"NewValue\");\n        assertEquals(3, map.size());\n        assertEquals(true, map.containsKey(ONE));\n        assertEquals(true, map.containsKey(TWO));\n        assertEquals(true, map.containsKey(THREE));\n        assertEquals(TEN, map.get(ONE));\n        assertEquals(TWENTY, map.get(TWO));\n        assertEquals(\"NewValue\", map.get(THREE));\n    }\n\n    //-----------------------------------------------------------------------\n    public BulkTest bulkTestMapIterator() {\n        return new TestFlatMapIterator();\n    }\n    \n    public class TestFlatMapIterator extends AbstractTestMapIterator {\n        public TestFlatMapIterator() {\n            super(\"TestFlatMapIterator\");\n        }\n        \n        public Object[] addSetValues() {\n            return TestFlat3Map.this.getNewSampleValues();\n        }\n        \n        public boolean supportsRemove() {\n            return TestFlat3Map.this.isRemoveSupported();\n        }\n\n        public boolean supportsSetValue() {\n            return TestFlat3Map.this.isSetValueSupported();\n        }\n\n        public MapIterator makeEmptyMapIterator() {\n            resetEmpty();\n            return ((Flat3Map) TestFlat3Map.this.map).mapIterator();\n        }\n\n        public MapIterator makeFullMapIterator() {\n            resetFull();\n            return ((Flat3Map) TestFlat3Map.this.map).mapIterator();\n        }\n        \n        public Map getMap() {\n            // assumes makeFullMapIterator() called first\n            return TestFlat3Map.this.map;\n        }\n        \n        public Map getConfirmedMap() {\n            // assumes makeFullMapIterator() called first\n            return TestFlat3Map.this.confirmed;\n        }\n        \n        public void verify() {\n            super.verify();\n            TestFlat3Map.this.verify();\n        }\n    }\n    \n    public String getCompatibilityVersion() {\n        return \"3.1\";\n    }\n\n//    public void testCreate() throws Exception {\n//        resetEmpty();\n//        writeExternalFormToDisk(\n//            (java.io.Serializable) map,\n//            \"D:/dev/collections/data/test/Flat3Map.emptyCollection.version3.1.obj\");\n//        resetFull();\n//        writeExternalFormToDisk(\n//            (java.io.Serializable) map,\n//            \"D:/dev/collections/data/test/Flat3Map.fullCollection.version3.1.obj\");\n//    }\n}\n",
+                           "source_sha256":  "7EFFB3D9C8EA462EF217955214CA9A728AC423EC7640CE2DF52EFD7FE892978F",
+                           "materialized_from":  "source_artifact/RQ3-M-COLLECTIONS-09.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-COLLECTIONS-09",
+                          "repository":  {
+                                             "project":  "Collections",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Collections-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.collections.map.TestFlat3Map::testEntryIteratorSetValue2",
+                          "focal_class":  "[CONTEXT_WITHHELD]",
+                          "collected_at":  "2026-08-17T09:07:13.2097685+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  114263,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  43978,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "FAIL",
+                                                "exit_code":  25,
+                                                "duration_ms":  58869,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "0529D13BEAACDCB689F467F82AA95CC5E487BD147C58DA803C85BFF2F1437F63",
+                                                "stderr_sha256":  "8816C1D5EAC9914D2423C0F3A89A45D5B1F512D4E6FAF5585A0B504D18905542",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  186817,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3125CA2A62CC4F6541BDAC66318C15EDEF77F3CA02811259108D3B13E0D47E2",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "TOOL_FAILED",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  72,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\nIllegal division by zero at /defects4j/framework/bin/d4j/d4j-coverage line 168.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

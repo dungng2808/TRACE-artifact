@@ -1,0 +1,39 @@
+﻿{
+    "schema_version":  "rq3-prediction-freeze-v2",
+    "frozen_at":  "2026-08-31T03:03:45.9311532+00:00",
+    "predictions_file":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\predictions_free_repaired_20260831\\predictions_merged_v2.json",
+    "predictions_sha256":  "3D400CC58064FD6A6F3CA92A957734CD21C04B4CAE48C6FB6406F28B226AB0FA",
+    "prediction_count":  219,
+    "unique_case_count":  73,
+    "private_gold_joined":  false,
+    "replacements":  [
+                         {
+                             "key":  "RQ3-M-CLI-08|B2_SPECIALIZED_MULTI_AGENT",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_timeout600\\RQ3_Batch_20260825_210156\\predictions.json"
+                         },
+                         {
+                             "key":  "RQ3-M-COMPRESS-01|B1_GENERAL_REVIEWER",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_timeout600\\RQ3_Batch_20260825_210156\\predictions.json"
+                         },
+                         {
+                             "key":  "RQ3-M-MATH-06|B2_SPECIALIZED_MULTI_AGENT",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_free_20260831\\predictions.json"
+                         },
+                         {
+                             "key":  "RQ3-M-COMPRESS-01|B2_SPECIALIZED_MULTI_AGENT",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_free_20260831\\predictions.json"
+                         },
+                         {
+                             "key":  "RQ3-M-CSV-06|B1_GENERAL_REVIEWER",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_free_20260831\\predictions.json"
+                         },
+                         {
+                             "key":  "RQ3-M-CSV-06|B2_SPECIALIZED_MULTI_AGENT",
+                             "source":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase3_Consensus\\wpf_phase6_runs_v2\\KQ_Thucnghiem_VerHeThong2_deepseek_v4_pro_20260826_030234\\repair_pass_free_20260831\\predictions.json"
+                         }
+                     ],
+    "invalid_outputs":  [
+
+                        ],
+    "valid_for_complete_case_analysis":  true
+}

@@ -1,0 +1,38 @@
+{
+  "scope": "Post hoc sensitivity estimate; not observed Gemini 2.5 Flash campaign usage",
+  "campaign_model": "google/gemini-2.5-flash via OpenRouter",
+  "calibration_model": "Gemini 3.5 Flash RQ3 exploratory study",
+  "calibration_non_retry_b2_cases": 67,
+  "evosuite_b2_reached_runs": 275,
+  "nominal_specialist_invocations": 825,
+  "raw_records_sha256": "f6668143799839006ed03a92c4e2ab4a3aadcd7c20f717084b5131c88d257c84",
+  "rq3_predictions_sha256": "7f6ec3b041ed94596b6ac78848fb63ee50120007db5e34026c0096d766f6664f",
+  "source_java_bytes": 4444504,
+  "estimates": {
+    "o200k_base": {
+      "source_token_sum": 1150456,
+      "input_tokens_per_b2_fit_intercept": 9865.802363771601,
+      "input_tokens_per_source_token_fit_slope": 3.8743552346565417,
+      "calibration_r_squared": 0.9883700640299053,
+      "estimated_input_tokens": 7170371,
+      "estimated_output_tokens": 59330,
+      "estimated_total_tokens": 7229701
+    },
+    "cl100k_base": {
+      "source_token_sum": 1121133,
+      "input_tokens_per_b2_fit_intercept": 9820.349946355465,
+      "input_tokens_per_source_token_fit_slope": 4.05143896729177,
+      "calibration_r_squared": 0.9894820937104505,
+      "estimated_input_tokens": 7242798,
+      "estimated_output_tokens": 59330,
+      "estimated_total_tokens": 7302128
+    }
+  },
+  "limitations": [
+    "Neither tokenizer is the Gemini 2.5 Flash tokenizer.",
+    "Only retained test source is tokenized; the complete historical B2 prompts and responses are unavailable.",
+    "Prompt/evidence overhead and output tokens are inferred from a different RQ3 model and cohort.",
+    "Retries and provider-specific hidden/thinking tokens cannot be reconstructed.",
+    "The fitted R-squared is in-sample and does not measure transfer accuracy to EvoSuite."
+  ]
+}

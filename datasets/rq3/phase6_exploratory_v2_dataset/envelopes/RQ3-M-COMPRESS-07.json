@@ -1,0 +1,227 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-COMPRESS-07",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-COMPRESS-07",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Compress-1f",
+                                           "project":  "Compress",
+                                           "repository_url":  "https://github.com/apache/commons-compress.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "004124ac5dbf5edbf925078652526267468821e7"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-COMPRESS-base-test.java",
+                                          "artifact_sha256":  "4c04b5745252d9fc15034674cebae9ecc3c49435184f723b8493a6f3c6eaa7f1"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "The test creates a cpio archive using CpioArchiveOutputStream via ArchiveStreamFactory, adding two entries (test1.xml and test2.xml) with file lengths, copying file contents into the stream, and closing entries. It then reads the archive using an archive input stream, extracts files, and asserts that the extracted files exist and have the expected lengths.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one\n * or more contributor license agreements.  See the NOTICE file\n * distributed with this work for additional information\n * regarding copyright ownership.  The ASF licenses this file\n * to you under the Apache License, Version 2.0 (the\n * \"License\"); you may not use this file except in compliance\n * with the License.  You may obtain a copy of the License at\n *\n * http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing,\n * software distributed under the License is distributed on an\n * \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n * KIND, either express or implied.  See the License for the\n * specific language governing permissions and limitations\n * under the License.\n */\npackage org.apache.commons.compress.archivers;\n\nimport java.io.File;\nimport java.io.FileInputStream;\nimport java.io.FileOutputStream;\nimport java.io.InputStream;\nimport java.io.OutputStream;\nimport java.util.HashMap;\nimport java.util.Map;\nimport org.apache.commons.compress.AbstractTestCase;\nimport org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;\nimport org.apache.commons.compress.utils.IOUtils;\n\npublic final class CpioTestCase extends AbstractTestCase {\n\n    public void testCpioArchiveCreation() throws Exception {\n        final File output = new File(dir, \"bla.cpio\");\n        final File file1 = getFile(\"test1.xml\");\n        final File file2 = getFile(\"test2.xml\");\n        final OutputStream out = new FileOutputStream(output);\n        final ArchiveOutputStream os = new ArchiveStreamFactory().createArchiveOutputStream(\"cpio\", out);\n        os.putArchiveEntry(new CpioArchiveEntry(\"test1.xml\", file1.length()));\n        IOUtils.copy(new FileInputStream(file1), os);\n        os.closeArchiveEntry();\n        os.putArchiveEntry(new CpioArchiveEntry(\"test2.xml\", file2.length()));\n        IOUtils.copy(new FileInputStream(file2), os);\n        os.closeArchiveEntry();\n        os.close();\n    }\n\n    public void testCpioUnarchive() throws Exception {\n        final File output = new File(dir, \"bla.cpio\");\n        {\n            final File file1 = getFile(\"test1.xml\");\n            final File file2 = getFile(\"test2.xml\");\n            final OutputStream out = new FileOutputStream(output);\n            final ArchiveOutputStream os = new ArchiveStreamFactory().createArchiveOutputStream(\"cpio\", out);\n            os.putArchiveEntry(new CpioArchiveEntry(\"test1.xml\", file1.length()));\n            IOUtils.copy(new FileInputStream(file1), os);\n            os.closeArchiveEntry();\n            os.putArchiveEntry(new CpioArchiveEntry(\"test2.xml\", file2.length()));\n            IOUtils.copy(new FileInputStream(file2), os);\n            os.closeArchiveEntry();\n            os.close();\n            out.close();\n        }\n        // Unarchive Operation\n        final File input = output;\n        final InputStream is = new FileInputStream(input);\n        final ArchiveInputStream in = new ArchiveStreamFactory().createArchiveInputStream(\"cpio\", is);\n        Map result = new HashMap();\n        ArchiveEntry entry = null;\n        while ((entry = in.getNextEntry()) != null) {\n            File target = new File(dir, entry.getName());\n            final OutputStream out = new FileOutputStream(target);\n            IOUtils.copy(in, out);\n            out.close();\n            result.put(entry.getName(), target);\n        }\n        in.close();\n        int lineSepLength = System.getProperty(\"line.separator\").length();\n        File t = (File) result.get(\"test1.xml\");\n        ;\n        ;\n        t = (File) result.get(\"test2.xml\");\n        ;\n        ;\n    }\n}\n",
+                           "source_sha256":  "4028374414D6BA96F8D1D83A96433D1CDDDD96E643AB7E7CC826BDE69D927E81",
+                           "materialized_from":  "source_artifact/RQ3-M-COMPRESS-07.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-COMPRESS-07",
+                          "repository":  {
+                                             "project":  "Compress",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Compress-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                          "focal_class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                          "collected_at":  "2026-08-17T08:49:54.0325126+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  27343,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  11248,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  21361,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "52F841772F4EC5FD0C39A5BB4E3E6BEBE3A7C5ECA11E23208B38339A42BF23DB",
+                                                "stderr_sha256":  "2C20A0C303AC26033EA70CA17B8025ACD9FC61A4A42C8C19F3D7F97237FBDEAD",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  136243,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "C673194FD77773D24550B3475A56C0065AC693B62ADF5EC7CAC6143F8ACAE349",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "TRUE",
+                                           "lines_total":  165,
+                                           "lines_covered":  104,
+                                           "conditions_total":  59,
+                                           "conditions_covered":  27,
+                                           "evidence_status":  "AVAILABLE",
+                                           "note":  "Defects4J targeted coverage instrumented the declared focal class. This is class-level reachability; method-level attribution requires a separately validated JaCoCo resolver."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  107,
+                                           "evidence_status":  "AVAILABLE_RAW_SURVIVORS",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+                                                                     {
+                                                                         "mutant_id":  "2",
+                                                                         "operator":  "LVR",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "CLASS_LEVEL",
+                                                                         "line":  71,
+                                                                         "original":  "0",
+                                                                         "replacement":  "1",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "3",
+                                                                         "operator":  "LVR",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "CLASS_LEVEL",
+                                                                         "line":  71,
+                                                                         "original":  "0",
+                                                                         "replacement":  "-1",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "4",
+                                                                         "operator":  "STD",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "\u003cinit\u003e(java.io.OutputStream,short)",
+                                                                         "line":  87,
+                                                                         "original":  "setFormat(format);",
+                                                                         "replacement":  "\u003cNO-OP\u003e",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "5",
+                                                                         "operator":  "COR",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "ensureOpen()",
+                                                                         "line":  108,
+                                                                         "original":  "this.closed",
+                                                                         "replacement":  "false",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "7",
+                                                                         "operator":  "STD",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "setFormat(short)",
+                                                                         "line":  132,
+                                                                         "original":  "this.entryFormat = format;",
+                                                                         "replacement":  "\u003cNO-OP\u003e",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "8",
+                                                                         "operator":  "STD",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "putNextEntry(org.apache.commons.compress.archivers.cpio.CpioArchiveEntry)",
+                                                                         "line":  150,
+                                                                         "original":  "ensureOpen();",
+                                                                         "replacement":  "\u003cNO-OP\u003e",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "11",
+                                                                         "operator":  "LVR",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "putNextEntry(org.apache.commons.compress.archivers.cpio.CpioArchiveEntry)",
+                                                                         "line":  154,
+                                                                         "original":  "-1",
+                                                                         "replacement":  "0",
+                                                                         "status":  "SURVIVED"
+                                                                     },
+                                                                     {
+                                                                         "mutant_id":  "12",
+                                                                         "operator":  "LVR",
+                                                                         "class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                                                         "method":  "putNextEntry(org.apache.commons.compress.archivers.cpio.CpioArchiveEntry)",
+                                                                         "line":  154,
+                                                                         "original":  "-1",
+                                                                         "replacement":  "1",
+                                                                         "status":  "SURVIVED"
+                                                                     }
+                                                                 ],
+                                           "selected_test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                                           "raw_report_sha256":  "FE99F001AF6C7405F5D2049D6DBD32690FFE950D48B2022624C685BC8A5EB79E"
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

@@ -1,0 +1,129 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-MOCKITO-02",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-MOCKITO-02",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Mockito-38f",
+                                           "project":  "Mockito",
+                                           "repository_url":  "https://github.com/mockito/mockito.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "38f",
+                                         "resolved_revision":  "c1f2c4e6b5bab4cfc004f22999e11e8ac140d377"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/case_variants/RQ3-M-MOCKITO-02.java",
+                                          "artifact_sha256":  "07d6a09a0ed28e0b34ac082fb4254e277410d959a9ca8bda8e33adff7ea8a209"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool",
+                                              "candidate_method":  "getSuspiciouslyNotMatchingArgsIndexes(List\u003cMatcher\u003e, Object[])",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "The test directly exercises ArgumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes with a null argument and verifies that no suspicious matcher indices are returned. This validates null-safe behavior, confirming the mapping.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                           "source_text":  "/*\r\n * Copyright (c) 2007 Mockito contributors\r\n * This program is made available under the terms of the MIT License.\r\n */\r\npackage org.mockito.internal.verification.argumentmatching;\r\n\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\nimport org.hamcrest.BaseMatcher;\r\nimport org.hamcrest.Description;\r\nimport org.hamcrest.Matcher;\r\nimport org.junit.Test;\r\nimport org.mockito.internal.matchers.Equals;\r\nimport org.mockitoutil.TestBase;\r\n\r\n@SuppressWarnings(\"unchecked\")\r\npublic class ArgumentMatchingToolTest extends TestBase {\r\n\r\n    private ArgumentMatchingTool tool = new ArgumentMatchingTool();\r\n\r\n    @Test\r\n    public void shouldNotFindAnySuspiciousMatchersWhenNumberOfArgumentsDoesntMatch() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(1));\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] { 10, 20 });\r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n\r\n    @Test\r\n    public void shouldNotFindAnySuspiciousMatchersWhenArgumentsMatch() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(10), new Equals(20));\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] { 10, 20 });\r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n\r\n    @Test\r\n    public void shouldFindSuspiciousMatchers() {\r\n        //given\r\n        Equals matcherInt20 = new Equals(20);\r\n        Long longPretendingAnInt = new Long(20);\r\n        //when\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(10), matcherInt20);\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] { 10, longPretendingAnInt });\r\n        //then\r\n        assertEquals(1, suspicious.length);\r\n        assertEquals(new Integer(1), suspicious[0]);\r\n    }\r\n\r\n    @Test\r\n    public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {\r\n        //given\r\n        Equals matcherWithBadDescription = new Equals(20) {\r\n\r\n            public void describeTo(Description desc) {\r\n                //let\u0027s pretend we have the same description as the toString() of the argument\r\n                desc.appendText(\"10\");\r\n            }\r\n        };\r\n        Integer argument = 10;\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes((List) Arrays.asList(matcherWithBadDescription), new Object[] { argument });\r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n\r\n    @Test\r\n    public void shouldWorkFineWhenGivenArgIsNull() {\r\n        RQ3_NONEXISTENT_LOCAL_SYMBOL();\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes((List) Arrays.asList(new Equals(20)), new Object[] { null });\r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n\r\n    @Test\r\n    public void shouldUseMatchersSafely() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new BaseMatcher() {\r\n\r\n            public boolean matches(Object item) {\r\n                throw new ClassCastException(\"nasty matcher\");\r\n            }\r\n\r\n            public void describeTo(Description description) {\r\n            }\r\n        });\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] { 10 });\r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n}\r\n",
+                           "source_sha256":  "07D6A09A0ED28E0B34AC082FB4254E277410D959A9CA8BDA8E33ADFF7EA8A209",
+                           "materialized_from":  "source_artifact/RQ3-M-MOCKITO-02.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-MOCKITO-02",
+                          "repository":  {
+                                             "project":  "Mockito",
+                                             "revision":  "38f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Mockito-38f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                          "focal_class":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool",
+                          "collected_at":  "2026-08-17T10:20:41.143615+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  116680,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "0A2DCE7955577D6A9FB2D95BD32B2AE7EA61B08B1AB173AFBA0A483E70407EFA",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted mutation evidence is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "tEquals(new Float(0.0F), mock.floatObjectReturningMethod(), 0.0F);\n    [javac]                      ^\n    [javac] /work/test/org/mockitousage/stubbing/ReturningDefaultValuesTest.java:42: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertEquals(new Double(0.0D), mock.doubleObjectReturningMethod(), 0.0D);\n    [javac]                      ^\n    [javac] /work/test/org/mockitousage/stubbing/ReturningDefaultValuesTest.java:43: warning: [deprecation] Character(char) in Character has been deprecated\n    [javac]         assertEquals(new Character((char) 0), mock.charObjectReturningMethod());\n    [javac]                      ^\n    [javac] /work/test/org/mockitousage/stubbing/ReturningDefaultValuesTest.java:44: warning: [deprecation] Boolean(boolean) in Boolean has been deprecated\n    [javac]         assertEquals(new Boolean(false), mock.booleanObjectReturningMethod());\n    [javac]                      ^\n    [javac] /work/test/org/mockitousage/stubbing/StubbingConsecutiveAnswersTest.java:37: warning: non-varargs call of varargs method with inexact argument type for last parameter;\n    [javac]         when(mock.simpleMethod()).thenReturn(null, null);\n    [javac]                                                    ^\n    [javac]   cast to String for a varargs call\n    [javac]   cast to String[] for a non-varargs call and to suppress this warning\n    [javac] /work/test/org/mockitousage/stubbing/StubbingUsingDoReturnTest.java:224: warning: [deprecation] Integer(int) in Integer has been deprecated\n    [javac]         doReturn(new Integer(2)).when(mock).intReturningMethod();\n    [javac]                  ^\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:51: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(expected).on().clear();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:62: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(new ExceptionOne()).on().clear();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:63: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:117: warning: non-varargs call of varargs method with inexact argument type for last parameter;\n    [javac]         when(mock.add(\"monkey island\")).thenThrow(null);\n    [javac]                                                   ^\n    [javac]   cast to Throwable for a varargs call\n    [javac]   cast to Throwable[] for a non-varargs call and to suppress this warning\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:124: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:126: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mockTwo).toThrow(new ExceptionThree()).on().clear();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:157: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(new RuntimeException()).on().clone();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/stubbing/StubbingWithThrowablesTest.java:177: warning: [deprecation] \u003cT\u003estubVoid(T) in Mockito has been deprecated\n    [javac]         stubVoid(mock).toThrow(new RuntimeException()).on().clone();\n    [javac]         ^\n    [javac]   where T is a type-variable:\n    [javac]     T extends Object declared in method \u003cT\u003estubVoid(T)\n    [javac] /work/test/org/mockitousage/verification/BasicVerificationInOrderTest.java:253: warning: non-varargs call of varargs method with inexact argument type for last parameter;\n    [javac]         inOrder(null);\n    [javac]                 ^\n    [javac]   cast to Object for a varargs call\n    [javac]   cast to Object[] for a non-varargs call and to suppress this warning\n    [javac] /work/test/org/mockitousage/verification/NoMoreInteractionsVerificationTest.java:102: warning: non-varargs call of varargs method with inexact argument type for last parameter;\n    [javac]         verifyNoMoreInteractions(null);\n    [javac]                                  ^\n    [javac]   cast to Object for a varargs call\n    [javac]   cast to Object[] for a non-varargs call and to suppress this warning\n    [javac] 1 error\n    [javac] 56 warnings\n\nBUILD FAILED\n/defects4j/framework/projects/Mockito/Mockito.build.xml:162: The following error occurred while executing this line:\n/defects4j/framework/projects/Mockito/Mockito.build.xml:70: The following error occurred while executing this line:\n/work/build.xml:82: Compile failed; see the compiler error output for details.\n\nTotal time: 1 minute 28 seconds\nCannot compile tests! at /defects4j/framework/bin/d4j/d4j-compile line 83.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  ""
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

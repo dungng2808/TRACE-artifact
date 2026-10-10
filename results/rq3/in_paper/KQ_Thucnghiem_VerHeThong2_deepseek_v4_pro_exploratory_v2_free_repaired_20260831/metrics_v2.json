@@ -1,0 +1,108 @@
+﻿{
+    "schema_version":  "rq3-exploratory-v2-metrics",
+    "generated_at":  "2026-08-31T03:04:35.5326232+00:00",
+    "cohort_status":  "FROZEN_EXPLORATORY_V2",
+    "predictions_sha256":  "3D400CC58064FD6A6F3CA92A957734CD21C04B4CAE48C6FB6406F28B226AB0FA",
+    "manifest_sha256":  "8A29C26A701007C3008A291EC6C3240081B4D3DD56E96A07468718B90F154669",
+    "evaluation_cases":  73,
+    "prediction_rows":  219,
+    "metrics":  [
+                    {
+                        "verifier":  "B0_BASIC_TOOL_GATE",
+                        "cases":  73,
+                        "false_pass_precision":  0,
+                        "false_pass_recall":  0,
+                        "false_pass_f1":  0,
+                        "false_acceptance_rate":  1,
+                        "decision_accuracy":  0.452055,
+                        "decision_accuracy_wilson_95":  {
+                                                            "lower":  0.343147,
+                                                            "upper":  0.565757
+                                                        },
+                        "attribution_macro_f1":  0.073469,
+                        "macro_attribution_f1":  0.073469,
+                        "attribution_macro_f1_all_labels":  0.088889,
+                        "routing_accuracy":  0.314815,
+                        "abstention_rate":  0,
+                        "decision_coverage":  1,
+                        "selective_accuracy":  0.452055,
+                        "api_or_output_error_count":  0,
+                        "input_tokens":  0,
+                        "output_tokens":  0,
+                        "api_calls":  0,
+                        "cost_usd":  0
+                    },
+                    {
+                        "verifier":  "B1_GENERAL_REVIEWER",
+                        "cases":  73,
+                        "false_pass_precision":  1,
+                        "false_pass_recall":  0.538462,
+                        "false_pass_f1":  0.7,
+                        "false_acceptance_rate":  0.423077,
+                        "decision_accuracy":  0.726027,
+                        "decision_accuracy_wilson_95":  {
+                                                            "lower":  0.61437,
+                                                            "upper":  0.815086
+                                                        },
+                        "attribution_macro_f1":  0.374008,
+                        "macro_attribution_f1":  0.374008,
+                        "attribution_macro_f1_all_labels":  0.415811,
+                        "routing_accuracy":  0.537037,
+                        "abstention_rate":  0.123288,
+                        "decision_coverage":  0.876712,
+                        "selective_accuracy":  0.71875,
+                        "api_or_output_error_count":  0,
+                        "input_tokens":  606914,
+                        "output_tokens":  231534,
+                        "api_calls":  73,
+                        "cost_usd":  0
+                    },
+                    {
+                        "verifier":  "B2_SPECIALIZED_MULTI_AGENT",
+                        "cases":  73,
+                        "false_pass_precision":  1,
+                        "false_pass_recall":  0.538462,
+                        "false_pass_f1":  0.7,
+                        "false_acceptance_rate":  0,
+                        "decision_accuracy":  0.616438,
+                        "decision_accuracy_wilson_95":  {
+                                                            "lower":  0.501741,
+                                                            "upper":  0.719494
+                                                        },
+                        "attribution_macro_f1":  0.37492,
+                        "macro_attribution_f1":  0.37492,
+                        "attribution_macro_f1_all_labels":  0.270162,
+                        "routing_accuracy":  0.62963,
+                        "abstention_rate":  0.232877,
+                        "decision_coverage":  0.767123,
+                        "selective_accuracy":  0.803571,
+                        "api_or_output_error_count":  0,
+                        "input_tokens":  1804094,
+                        "output_tokens":  286686,
+                        "api_calls":  219,
+                        "cost_usd":  0
+                    }
+                ],
+    "paired_tests":  [
+                         {
+                             "comparison":  "B2_vs_B1_GENERAL_REVIEWER",
+                             "b2_correct_baseline_wrong":  6,
+                             "baseline_correct_b2_wrong":  14,
+                             "discordant_pairs":  20,
+                             "exact_mcnemar_p":  0.1153183,
+                             "holm_adjusted_p":  null
+                         }
+                     ],
+    "b2_vs_b1":  {
+                     "decision_mcnemar":  {
+                                              "b2_correct_b1_wrong":  6,
+                                              "b1_correct_b2_wrong":  14,
+                                              "p_value":  0.1153183
+                                          },
+                     "false_pass_f1_delta_bootstrap_95":  {
+                                                              "lower":  -0.097674,
+                                                              "upper":  0.096154
+                                                          }
+                 },
+    "interpretation_rule":  "Claim B2 superiority only when the prespecified effect favors B2 and its uncertainty test supports the claim."
+}

@@ -1,0 +1,40 @@
+{
+  "studyDesign": {
+    "studyId": "RQ2-DESCRIPTIVE-100-REPLACEMENT",
+    "samplingFrame": "LIBRO-DEFECTS4J fixed/buggy reconstruction frame.",
+    "selectionMethod": "Preflight-verified replacement for the single excluded unit D4J-COMPRESS-6-4 in the 100-unit descriptive evaluation.",
+    "selectionSeed": 20260814,
+    "inclusionCriteria": ["Fixed failure is reproduced.", "Buggy baseline compiles."],
+    "exclusionCriteria": ["Unreproducible fixed failure.", "Buggy baseline does not compile."]
+  },
+  "tasks": [
+    {
+      "taskId": "D4J-JSOUP-32-48",
+      "projectId": "Jsoup",
+      "datasetId": "LIBRO-DEFECTS4J",
+      "artifactId": "Jsoup_32_n48.txt",
+      "independenceUnitId": "Jsoup#32",
+      "samplingStratum": "fixed-compile-error",
+      "sourceUri": "https://github.com/jhy/jsoup/issues/278",
+      "fixedRevision": "0e37cba87eea9d89156c144e3d4298c9c9ed04d4",
+      "buggyRevision": "fa87a8fe2838e80ae0eeba6e2978815ef5533e91",
+      "repositoryPath": "r/067f",
+      "buggyRepositoryPath": "r/067b",
+      "scenarioId": "Jsoup-32-scenario",
+      "testId": "Jsoup_32_n48.txt",
+      "failingTestMethod": "testClone",
+      "scenarioSpecification": "Element.clone() wrongly shared a same classNames Set instance\n\n\n<p dir=\"auto\">In the clone() method of Node, the Object.clone() is called, if the original element's classNames Set had been initialized before clone, the original classNames Set will be set to the new cloned Element instance due to the JDK's clone mechanism. Thus, the old element and the newly cloned Element will share a same classNames Set instance.</p>",
+      "traceabilityLink": "Jsoup-32-scenario -> Jsoup_32_n48.txt",
+      "initialEvidence": "LIBRO recorded fixed-compile-error for Jsoup_32_n48.txt on the fixed revision.",
+      "testFilePath": "src/test/java/org/jsoup/nodes/TestAutoGen.java",
+      "testClassName": "org.jsoup.nodes.TestAutoGen",
+      "modulePath": "",
+      "buildSystem": "maven",
+      "focalSourceFiles": ["src/main/java/org/jsoup/nodes/Element.java"],
+      "previouslyVerifiedTests": [],
+      "coverageReportPath": "target/site/jacoco/jacoco.xml",
+      "mutationReportPath": "target/pit-reports/mutations.xml",
+      "javaHome": "D:\\Ky9\\Experiment\\external-datasets\\toolchains\\temurin8\\jdk8u502-b07"
+    }
+  ]
+}

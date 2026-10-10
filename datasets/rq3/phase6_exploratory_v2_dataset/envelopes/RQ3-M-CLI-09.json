@@ -1,0 +1,153 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-CLI-09",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-CLI-09",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Cli-1f",
+                                           "project":  "Cli",
+                                           "repository_url":  "https://github.com/apache/commons-cli.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "b0e1b80b6d4a10a9c9f46539bc4c7a3cce55886e"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-CLI-base-test.java",
+                                          "artifact_sha256":  "46d2854c12ea2137aac196dc68b69b2fb4882f71f0d01d6b27475363dd15bd06"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.cli.CommandLine",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Parsing command line arguments with PosixParser where an option expects an argument.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.cli.bug.BugCLI13Test::testCLI13.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.cli.CommandLine"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2",
+                        "context_redactions":  [
+                                                   {
+                                                       "field":  "related_method_context",
+                                                       "status":  "INTENTIONALLY_REDACTED",
+                                                       "reason":  "Selective-verification abstention case"
+                                                   }
+                                               ]
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n * \n *      http://www.apache.org/licenses/LICENSE-2.0\n * \n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.cli.bug;\n\nimport junit.framework.TestCase;\nimport org.apache.commons.cli.CommandLine;\nimport org.apache.commons.cli.Option;\nimport org.apache.commons.cli.OptionBuilder;\nimport org.apache.commons.cli.Options;\nimport org.apache.commons.cli.ParseException;\nimport org.apache.commons.cli.PosixParser;\n\n/**\n * @author brianegge\n */\npublic class BugCLI13Test\n    extends TestCase\n{\n    public void testCLI13()\n        throws ParseException\n    {\n        final String debugOpt = \"debug\";\n        Option debug = OptionBuilder\n            .withArgName( debugOpt )\n            .withDescription( \"turn on debugging\" )\n            .withLongOpt( debugOpt )\n            .hasArg()\n            .create( \u0027d\u0027 );\n        Options options = new Options();\n        options.addOption( debug );\n        CommandLine commandLine = new PosixParser().parse( options, new String[]{\"-d\", \"true\"} );\n\n        assertEquals(\"true\", commandLine.getOptionValue( debugOpt ));\n        assertEquals(\"true\", commandLine.getOptionValue( \u0027d\u0027 ));\n        assertTrue(commandLine.hasOption( \u0027d\u0027));\n        assertTrue(commandLine.hasOption( debugOpt));\n    }\n}\n",
+                           "source_sha256":  "46D2854C12EA2137AAC196DC68B69B2FB4882F71F0D01D6B27475363DD15BD06",
+                           "materialized_from":  "source_artifact/RQ3-M-CLI-09.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-CLI-09",
+                          "repository":  {
+                                             "project":  "Cli",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Cli-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                          "focal_class":  "[CONTEXT_WITHHELD]",
+                          "collected_at":  "2026-08-17T10:43:50.0632293+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  9917,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  4676,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "FAIL",
+                                                "exit_code":  25,
+                                                "duration_ms":  8315,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "0529D13BEAACDCB689F467F82AA95CC5E487BD147C58DA803C85BFF2F1437F63",
+                                                "stderr_sha256":  "8816C1D5EAC9914D2423C0F3A89A45D5B1F512D4E6FAF5585A0B504D18905542",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  15145,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "12B56E19BE079777BCC373B516B6455A369F95648E4E64C69BFCC0843D62BDA5",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "TOOL_FAILED",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  5,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\nIllegal division by zero at /defects4j/framework/bin/d4j/d4j-coverage line 168.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

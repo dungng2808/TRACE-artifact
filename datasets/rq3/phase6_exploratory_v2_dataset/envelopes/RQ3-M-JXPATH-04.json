@@ -1,0 +1,146 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-JXPATH-04",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-JXPATH-04",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-JxPath-1f",
+                                           "project":  "JxPath",
+                                           "repository_url":  "https://github.com/apache/commons-jxpath.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "fab38abb27f2f92b9340cfc232eb5517434bf138"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-JXPATH-base-test.java",
+                                          "artifact_sha256":  "c29c93665b6a75522d76d9d924ae7b803c3aadd51ebc19b7721018e7e3508ce3"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Declared plan: The test method testGetNode validates XPath node type resolution (Document, Element, Attr) using the DOM model. DOMNodePointer is the core pointer class for DOM nodes and is directly exercised during these XPath evaluations. Since no single method is the exclusive target, class-level mapping is appropriate. The generated test must exercise the declared focal behavior rather than a different input path or behavior.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode.",
+                                         "expected_observation":  "The generated test must demonstrate the behavior declared above at the stated focal target; assertions about a different behavior do not satisfy the plan.",
+                                         "structural_target":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.jxpath.ri.model.dom;\n\nimport junit.framework.Test;\nimport junit.framework.TestSuite;\n\nimport org.apache.commons.jxpath.AbstractFactory;\nimport org.apache.commons.jxpath.ri.model.XMLModelTestCase;\nimport org.apache.commons.jxpath.xml.DocumentContainer;\nimport org.w3c.dom.Attr;\nimport org.w3c.dom.Document;\nimport org.w3c.dom.Element;\nimport org.w3c.dom.Node;\nimport org.w3c.dom.NodeList;\n\n/**\n * Tests JXPath with DOM\n *\n * @author Dmitri Plotnikov\n * @version $Revision$ $Date$\n */\n\npublic class DOMModelTest extends XMLModelTestCase {\n    \n    /**\n     * Construct a new instance of this test case.\n     *\n     * @param name Name of the test case\n     */\n    public DOMModelTest(String name) {\n        super(name);\n    }\n\n    /**\n     * Return the tests included in this test suite.\n     */\n    public static Test suite() {\n        return (new TestSuite(DOMModelTest.class));\n    }\n\n    protected String getModel() {\n        return DocumentContainer.MODEL_DOM;\n    }\n\n    protected AbstractFactory getAbstractFactory() {\n        return new TestDOMFactory();\n    }\n    \n    public void testGetNode() {\n        assertXPathNodeType(context, \"/\", Document.class);\n        assertXPathNodeType(context, \"/vendor/location\", Element.class);\n        assertXPathNodeType(context, \"//location/@name\", Attr.class);\n        assertXPathNodeType(context, \"//vendor\", Element.class);\n    }\n    \n    protected String getXMLSignature(\n        Object node,\n        boolean elements,\n        boolean attributes,\n        boolean text,\n        boolean pi) \n    {\n        StringBuffer buffer = new StringBuffer();\n        appendXMLSignature(buffer, node, elements, attributes, text, pi);\n        return buffer.toString();\n    }\n\n    private void appendXMLSignature(\n        StringBuffer buffer,\n        Object object,\n        boolean elements,\n        boolean attributes,\n        boolean text,\n        boolean pi) \n    {\n        Node node = (Node) object;\n        int type = node.getNodeType();\n        switch (type) {\n            case Node.DOCUMENT_NODE :\n                buffer.append(\"\u003cD\u003e\");\n                appendXMLSignature(\n                    buffer,\n                    node.getChildNodes(),\n                    elements,\n                    attributes,\n                    text,\n                    pi);\n                buffer.append(\"\u003c/D\");\n                break;\n\n            case Node.ELEMENT_NODE :\n                String tag = elements ? ((Element) node).getTagName() : \"E\";\n                buffer.append(\"\u003c\");\n                buffer.append(tag);\n                buffer.append(\"\u003e\");\n                appendXMLSignature(\n                    buffer,\n                    node.getChildNodes(),\n                    elements,\n                    attributes,\n                    text,\n                    pi);\n                buffer.append(\"\u003c/\");\n                buffer.append(tag);\n                buffer.append(\"\u003e\");\n                break;\n\n            case Node.TEXT_NODE :\n            case Node.CDATA_SECTION_NODE :\n                if (text) {\n                    String string = node.getNodeValue();\n                    string = string.replace(\u0027\\n\u0027, \u0027=\u0027);\n                    buffer.append(string);\n                }\n                break;\n        }\n    }\n\n    private void appendXMLSignature(\n        StringBuffer buffer,\n        NodeList children,\n        boolean elements,\n        boolean attributes,\n        boolean text,\n        boolean pi) \n    {\n        for (int i = 0; i \u003c children.getLength(); i++) {\n            appendXMLSignature(\n                buffer,\n                children.item(i),\n                elements,\n                attributes,\n                text,\n                pi);\n        }\n    }\n}",
+                           "source_sha256":  "C29C93665B6A75522D76D9D924AE7B803C3AADD51EBC19B7721018E7E3508CE3",
+                           "materialized_from":  "source_artifact/RQ3-M-JXPATH-04.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-JXPATH-04",
+                          "repository":  {
+                                             "project":  "JxPath",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\JxPath-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                          "focal_class":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer",
+                          "collected_at":  "2026-08-17T10:48:39.791346+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  44551,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  19276,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  34016,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "AA6B28838A1AC88F335E615055E5A1D5B44FA4644AAE585EADEFACD1127315FA",
+                                                "stderr_sha256":  "2C20A0C303AC26033EA70CA17B8025ACD9FC61A4A42C8C19F3D7F97237FBDEAD",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  138483,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "75BAE338A9DBA94C4FD6A0CC054831C2A16D665002E9E98706C34AB1FEC3388A",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "TRUE",
+                                           "lines_total":  378,
+                                           "lines_covered":  55,
+                                           "conditions_total":  271,
+                                           "conditions_covered":  29,
+                                           "evidence_status":  "AVAILABLE",
+                                           "note":  "Defects4J targeted coverage instrumented the declared focal class. This is class-level reachability; method-level attribution requires a separately validated JaCoCo resolver."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  26,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

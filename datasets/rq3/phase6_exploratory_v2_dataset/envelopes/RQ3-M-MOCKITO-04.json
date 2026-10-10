@@ -1,0 +1,146 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-MOCKITO-04",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-MOCKITO-04",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Mockito-38f",
+                                           "project":  "Mockito",
+                                           "repository_url":  "https://github.com/mockito/mockito.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "38f",
+                                         "resolved_revision":  "c1f2c4e6b5bab4cfc004f22999e11e8ac140d377"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-MOCKITO-base-test.java",
+                                          "artifact_sha256":  "4704f3de03ab1af1fdd9767bf3af03427ac19ff604cfac900a9ef8a194ff7b4a"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool",
+                                              "candidate_method":  "getSuspiciouslyNotMatchingArgsIndexes(java.util.List, java.lang.Object[])",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Declared plan: The test directly invokes the focal method getSuspiciouslyNotMatchingArgsIndexes with a null argument and verifies the return is an empty array. This behavior is implemented in the candidate class, confirming the mapping. The generated test must exercise the declared focal behavior rather than a different input path or behavior.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull.",
+                                         "expected_observation":  "The generated test must demonstrate the behavior declared above at the stated focal target; assertions about a different behavior do not satisfy the plan.",
+                                         "structural_target":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                           "source_text":  "/*\r\n * Copyright (c) 2007 Mockito contributors\r\n * This program is made available under the terms of the MIT License.\r\n */\r\npackage org.mockito.internal.verification.argumentmatching;\r\n\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\nimport org.hamcrest.BaseMatcher;\r\nimport org.hamcrest.Description;\r\nimport org.hamcrest.Matcher;\r\nimport org.junit.Test;\r\nimport org.mockito.internal.matchers.Equals;\r\nimport org.mockitoutil.TestBase;\r\n\r\n@SuppressWarnings(\"unchecked\")\r\npublic class ArgumentMatchingToolTest extends TestBase {\r\n\r\n    private ArgumentMatchingTool tool = new ArgumentMatchingTool();\r\n\r\n    @Test\r\n    public void shouldNotFindAnySuspiciousMatchersWhenNumberOfArgumentsDoesntMatch() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(1));\r\n\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});\r\n        \r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n\r\n    @Test\r\n    public void shouldNotFindAnySuspiciousMatchersWhenArgumentsMatch() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(10), new Equals(20));\r\n        \r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});\r\n        \r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n    \r\n    @Test\r\n    public void shouldFindSuspiciousMatchers() {\r\n        //given\r\n        Equals matcherInt20 = new Equals(20);\r\n        Long longPretendingAnInt = new Long(20);\r\n        \r\n        //when\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new Equals(10), matcherInt20);\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, longPretendingAnInt});\r\n        \r\n        //then\r\n        assertEquals(1, suspicious.length);\r\n        assertEquals(new Integer(1), suspicious[0]);\r\n    }\r\n    \r\n    @Test\r\n    public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {\r\n        //given\r\n        Equals matcherWithBadDescription = new Equals(20) {\r\n            public void describeTo(Description desc) {\r\n                //let\u0027s pretend we have the same description as the toString() of the argument\r\n                desc.appendText(\"10\");\r\n            }\r\n        };\r\n        Integer argument = 10;\r\n        \r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes((List) Arrays.asList(matcherWithBadDescription), new Object[] {argument});\r\n        \r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n    \r\n    @Test\r\n    public void shouldWorkFineWhenGivenArgIsNull() {\r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes((List) Arrays.asList(new Equals(20)), new Object[] {null});\r\n        \r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n    \r\n    @Test\r\n    public void shouldUseMatchersSafely() {\r\n        //given\r\n        List\u003cMatcher\u003e matchers = (List) Arrays.asList(new BaseMatcher() {\r\n            public boolean matches(Object item) {\r\n                throw new ClassCastException(\"nasty matcher\");\r\n            }\r\n\r\n            public void describeTo(Description description) {\r\n            }});\r\n        \r\n        //when\r\n        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10});\r\n        \r\n        //then\r\n        assertEquals(0, suspicious.length);\r\n    }\r\n}",
+                           "source_sha256":  "4704F3DE03AB1AF1FDD9767BF3AF03427AC19FF604CFAC900A9EF8A194FF7B4A",
+                           "materialized_from":  "source_artifact/RQ3-M-MOCKITO-04.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-MOCKITO-04",
+                          "repository":  {
+                                             "project":  "Mockito",
+                                             "revision":  "38f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Mockito-38f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull",
+                          "focal_class":  "org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool",
+                          "collected_at":  "2026-08-17T10:08:23.6992229+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  144012,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  268270,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  282441,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "884591637122006C066E0E0868F70C5B455ADF554DC45F6392AB1A8B652829B1",
+                                                "stderr_sha256":  "2C20A0C303AC26033EA70CA17B8025ACD9FC61A4A42C8C19F3D7F97237FBDEAD",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  259027,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "FD0860AB65A7739ED4E78ACA5C52155A0B8FDB0B79ED3E58AE21E0707086382A",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "TRUE",
+                                           "lines_total":  18,
+                                           "lines_covered":  13,
+                                           "conditions_total":  14,
+                                           "conditions_covered":  7,
+                                           "evidence_status":  "AVAILABLE",
+                                           "note":  "Defects4J targeted coverage instrumented the declared focal class. This is class-level reachability; method-level attribution requires a separately validated JaCoCo resolver."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  14,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

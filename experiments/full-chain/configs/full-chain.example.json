@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "full-chain-config-v1",
+  "experimentId": "FULL-CHAIN-PILOT-EXAMPLE",
+  "mode": "Pilot",
+  "cohortManifestPath": "experiments/full-chain/manifests/full-chain-rq1-pilot-15.v1.json",
+  "datasetProjectsRoot": "datasets/rq1/sf110/java-ready/projects",
+  "outputRoot": "experiments/full-chain/runs",
+  "toolLockPath": "experiments/full-chain/tool-lock.json",
+  "repetitions": [42, 43, 44],
+  "budget": {
+    "hardWallClockSeconds": 900,
+    "fullChain": {
+      "generationTimeoutSeconds": 180,
+      "repairTotalTimeoutSeconds": 240,
+      "evaluationTotalTimeoutSeconds": 180,
+      "verificationTotalTimeoutSeconds": 240,
+      "orchestrationTimeoutSeconds": 60,
+      "maxRepairRounds": 2,
+      "maxVerificationPasses": 3,
+      "maxProviderRequests": 13,
+      "maxTransientRetriesPerRequest": 2,
+      "maxCumulativeTokens": 128000
+    },
+    "evoSuite": {
+      "searchTimeoutSeconds": 420,
+      "evaluationTotalTimeoutSeconds": 180,
+      "verificationTotalTimeoutSeconds": 240,
+      "orchestrationTimeoutSeconds": 60
+    }
+  },
+  "llm": {
+    "provider": "openrouter",
+    "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+    "modelId": "google/gemini-2.5-flash",
+    "temperature": 0.0,
+    "timeoutSeconds": 120,
+    "apiKeyEnvironmentVariable": "FULLCHAIN_LLM_KEY",
+    "apiKeyFilePath": "experiments/full-chain/configs/local-key.txt"
+  },
+  "tools": {
+    "javaHome": "JDK/macos-temurin-17/Contents/Home",
+    "mavenHome": "Maven/apache-maven-3.9.16",
+    "evosuiteJar": "tools/evosuite/evosuite-1.2.0.jar",
+    "evosuiteRuntimeJar": "tools/evosuite/evosuite-standalone-runtime-1.2.0.jar",
+    "jacocoVersion": "0.8.15",
+    "pitVersion": "1.25.3"
+  }
+}
+

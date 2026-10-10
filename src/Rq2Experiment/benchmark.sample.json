@@ -1,0 +1,63 @@
+{
+  "studyDesign": {
+    "studyId": "RQ2-CONFIRMATORY-V1",
+    "samplingFrame": "Describe the complete population from which eligible generated-test failures are selected.",
+    "selectionMethod": "Describe deterministic stratified sampling and freeze this text before the confirmatory batch.",
+    "selectionSeed": 20260814,
+    "inclusionCriteria": [
+      "The fixed and buggy revisions and initial failure are reproducible."
+    ],
+    "exclusionCriteria": [
+      "Duplicate artifact or duplicate underlying bug independence unit."
+    ],
+    "powerPlan": {
+      "familyWiseAlpha": 0.05,
+      "targetPower": 0.8,
+      "alternativeWinProbability": 0.7,
+      "expectedDiscordantUnitRate": 0.4,
+      "comparisonCount": 2,
+      "minimumProjects": 5,
+      "plannedIndependentUnits": 145,
+      "provisional": false
+    },
+    "outcomePlan": {
+      "contractVersion": "RQ2-OUTCOME-PLAN-1",
+      "successNonInferiorityMargin": 0.05,
+      "coverageNonInferiorityMargin": 0.05,
+      "mutationNonInferiorityMargin": 0.05,
+      "provisional": false
+    }
+  },
+  "tasks": [
+    {
+      "taskId": "TASK-001",
+      "projectId": "owner/project",
+      "datasetId": "DATASET-NAME-VERSION",
+      "artifactId": "stable-generated-test-id",
+      "independenceUnitId": "owner/project#underlying-bug-id",
+      "samplingStratum": "failure-category-or-project-stratum",
+      "sourceUri": "https://authoritative-source.example/artifact",
+      "fixedRevision": "full-fixed-commit-sha",
+      "buggyRevision": "full-buggy-commit-sha",
+      "repositoryPath": "C:\\path\\to\\your-java-repository",
+      "scenarioId": "S01",
+      "testId": "T01",
+      "failingTestMethod": "shouldRejectNegativeAmount",
+      "scenarioSpecification": "Reject negative payment amounts with IllegalArgumentException.",
+      "traceabilityLink": "S01 -> T01",
+      "initialEvidence": "Paste the reproducible initial compiler/JUnit failure here.",
+      "testFilePath": "src/test/java/com/example/PaymentServiceTest.java",
+      "testClassName": "com.example.PaymentServiceTest",
+      "modulePath": "",
+      "buildSystem": "maven",
+      "focalSourceFiles": [
+        "src/main/java/com/example/PaymentService.java"
+      ],
+      "previouslyVerifiedTests": [
+        "com.example.PaymentServiceTest#shouldAcceptPositiveAmount"
+      ],
+      "coverageReportPath": "target/site/jacoco/jacoco.xml",
+      "mutationReportPath": "target/pit-reports/mutations.xml"
+    }
+  ]
+}

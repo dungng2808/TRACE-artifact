@@ -1,0 +1,146 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-CODEC-01",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-CODEC-01",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Codec-18f",
+                                           "project":  "Codec",
+                                           "repository_url":  "https://github.com/apache/commons-codec.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "18f",
+                                         "resolved_revision":  "5ef5bd199a4e3df74479b4b363fa29b0b3092547"
+                                     },
+                        "case_origin":  "NATURAL",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS1",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-CODEC-base-test.java",
+                                          "artifact_sha256":  "7a331e49a8609fa49b6012d82216bf47093d8ba8e725617d1fc176b9fe42ea57"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.codec.binary.StringUtils",
+                                              "candidate_method":  "equals(CharSequence, CharSequence)",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Tests the StringUtils.equals method with CharSequence arguments (e.g., StringBuilder) to verify correct equality comparisons.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS1.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.codec.binary.StringUtils"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS1",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npackage org.apache.commons.codec.binary;\n\nimport java.io.UnsupportedEncodingException;\nimport java.util.Arrays;\n\nimport org.junit.Assert;\nimport org.junit.Test;\n\n/**\n * Tests {@link StringUtils}\n *\n * @version $Id$\n */\npublic class StringUtilsTest {\n\n    private static final byte[] BYTES_FIXTURE = {\u0027a\u0027,\u0027b\u0027,\u0027c\u0027};\n\n    // This is valid input for UTF-16BE\n    private static final byte[] BYTES_FIXTURE_16BE = {0, \u0027a\u0027, 0, \u0027b\u0027, 0, \u0027c\u0027};\n\n    // This is valid for UTF-16LE\n    private static final byte[] BYTES_FIXTURE_16LE = {\u0027a\u0027, 0, \u0027b\u0027, 0, \u0027c\u0027, 0};\n\n    private static final String STRING_FIXTURE = \"ABC\";\n\n    /**\n     * We could make the constructor private but there does not seem to be a point to jumping through extra code hoops\n     * to restrict instantiation right now.\n     */\n    @Test\n    public void testConstructor() {\n        new StringUtils();\n    }\n\n    @Test\n    public void testGetBytesIso8859_1() throws UnsupportedEncodingException {\n        final String charsetName = \"ISO-8859-1\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesIso8859_1(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    private void testGetBytesUnchecked(final String charsetName) throws UnsupportedEncodingException {\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUnchecked(STRING_FIXTURE, charsetName);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUsAscii() throws UnsupportedEncodingException {\n        final String charsetName = \"US-ASCII\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUsAscii(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUtf16() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUtf16(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUtf16Be() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16BE\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUtf16Be(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUtf16Le() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16LE\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUtf16Le(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUtf8() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-8\";\n        testGetBytesUnchecked(charsetName);\n        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);\n        final byte[] actual = StringUtils.getBytesUtf8(STRING_FIXTURE);\n        Assert.assertTrue(Arrays.equals(expected, actual));\n    }\n\n    @Test\n    public void testGetBytesUncheckedBadName() {\n        try {\n            StringUtils.getBytesUnchecked(STRING_FIXTURE, \"UNKNOWN\");\n            Assert.fail(\"Expected \" + IllegalStateException.class.getName());\n        } catch (final IllegalStateException e) {\n            // Expected\n        }\n    }\n\n    @Test\n    public void testGetBytesUncheckedNullInput() {\n        Assert.assertNull(StringUtils.getBytesUnchecked(null, \"UNKNOWN\"));\n    }\n\n    private void testNewString(final String charsetName) throws UnsupportedEncodingException {\n        final String expected = new String(BYTES_FIXTURE, charsetName);\n        final String actual = StringUtils.newString(BYTES_FIXTURE, charsetName);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringBadEnc() {\n        try {\n            StringUtils.newString(BYTES_FIXTURE, \"UNKNOWN\");\n            Assert.fail(\"Expected \" + IllegalStateException.class.getName());\n        } catch (final IllegalStateException e) {\n            // Expected\n        }\n    }\n\n    @Test\n    public void testNewStringNullInput() {\n        Assert.assertNull(StringUtils.newString(null, \"UNKNOWN\"));\n    }\n\n    @Test\n    public void testNewStringNullInput_CODEC229() {\n        Assert.assertNull(StringUtils.newStringUtf8(null));\n        Assert.assertNull(StringUtils.newStringIso8859_1(null));\n        Assert.assertNull(StringUtils.newStringUsAscii(null));\n        Assert.assertNull(StringUtils.newStringUtf16(null));\n        Assert.assertNull(StringUtils.newStringUtf16Be(null));\n        Assert.assertNull(StringUtils.newStringUtf16Le(null));\n    }\n\n    @Test\n    public void testNewStringIso8859_1() throws UnsupportedEncodingException {\n        final String charsetName = \"ISO-8859-1\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE, charsetName);\n        final String actual = StringUtils.newStringIso8859_1(BYTES_FIXTURE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringUsAscii() throws UnsupportedEncodingException {\n        final String charsetName = \"US-ASCII\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE, charsetName);\n        final String actual = StringUtils.newStringUsAscii(BYTES_FIXTURE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringUtf16() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE, charsetName);\n        final String actual = StringUtils.newStringUtf16(BYTES_FIXTURE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringUtf16Be() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16BE\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE_16BE, charsetName);\n        final String actual = StringUtils.newStringUtf16Be(BYTES_FIXTURE_16BE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringUtf16Le() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-16LE\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE_16LE, charsetName);\n        final String actual = StringUtils.newStringUtf16Le(BYTES_FIXTURE_16LE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testNewStringUtf8() throws UnsupportedEncodingException {\n        final String charsetName = \"UTF-8\";\n        testNewString(charsetName);\n        final String expected = new String(BYTES_FIXTURE, charsetName);\n        final String actual = StringUtils.newStringUtf8(BYTES_FIXTURE);\n        Assert.assertEquals(expected, actual);\n    }\n\n    @Test\n    public void testEqualsString() {\n        Assert.assertTrue(StringUtils.equals(null, null));\n        Assert.assertFalse(StringUtils.equals(\"abc\", null));\n        Assert.assertFalse(StringUtils.equals(null, \"abc\"));\n        Assert.assertTrue(StringUtils.equals(\"abc\", \"abc\"));\n        Assert.assertFalse(StringUtils.equals(\"abc\", \"abcd\"));\n        Assert.assertFalse(StringUtils.equals(\"abcd\", \"abc\"));\n        Assert.assertFalse(StringUtils.equals(\"abc\", \"ABC\"));\n    }\n\n    @Test\n    public void testEqualsCS1() {\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abc\"), null));\n        Assert.assertFalse(StringUtils.equals(null, new StringBuilder(\"abc\")));\n        Assert.assertTrue(StringUtils.equals(new StringBuilder(\"abc\"), new StringBuilder(\"abc\")));\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abc\"), new StringBuilder(\"abcd\")));\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abcd\"), new StringBuilder(\"abc\")));\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abc\"), new StringBuilder(\"ABC\")));\n    }\n\n    @Test\n    public void testEqualsCS2() {\n        Assert.assertTrue(StringUtils.equals(\"abc\", new StringBuilder(\"abc\")));\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abc\"), \"abcd\"));\n        Assert.assertFalse(StringUtils.equals(\"abcd\", new StringBuilder(\"abc\")));\n        Assert.assertFalse(StringUtils.equals(new StringBuilder(\"abc\"), \"ABC\"));\n    }\n}\n",
+                           "source_sha256":  "7A331E49A8609FA49B6012D82216BF47093D8BA8E725617D1FC176B9FE42EA57",
+                           "materialized_from":  "source_artifact/RQ3-M-CODEC-01.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-CODEC-01",
+                          "repository":  {
+                                             "project":  "Codec",
+                                             "revision":  "18f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Codec-18f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.codec.binary.StringUtilsTest::testEqualsCS1",
+                          "focal_class":  "org.apache.commons.codec.binary.StringUtils",
+                          "collected_at":  "2026-08-17T10:53:18.2106497+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  43515,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  18635,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  27920,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "CB3CAB26C467D8E2FD2749C0532C98A43CB35DDCC0AC4DAD1C02EEABAF1BA237",
+                                                "stderr_sha256":  "2C20A0C303AC26033EA70CA17B8025ACD9FC61A4A42C8C19F3D7F97237FBDEAD",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  44244,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "8AA37633DB0570E9AC56EF10A7609E9AF66956F1F90285F5FCB39A9F27BE1F48",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "TRUE",
+                                           "lines_total":  39,
+                                           "lines_covered":  5,
+                                           "conditions_total":  24,
+                                           "conditions_covered":  10,
+                                           "evidence_status":  "AVAILABLE",
+                                           "note":  "Defects4J targeted coverage instrumented the declared focal class. This is class-level reachability; method-level attribution requires a separately validated JaCoCo resolver."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  5,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

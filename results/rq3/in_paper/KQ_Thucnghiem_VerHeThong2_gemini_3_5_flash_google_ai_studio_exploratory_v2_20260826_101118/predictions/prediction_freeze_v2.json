@@ -1,0 +1,16 @@
+﻿{
+    "schema_version":  "rq3-prediction-freeze-v2",
+    "frozen_at":  "2026-08-26T03:51:01.0360796+00:00",
+    "predictions_file":  "R:\\BaoVer2\\ThucNgiem\\KQ_Thucnghiem_SauTinhChinh\\KQ_Thucnghiem_VerHeThong2_gemini_3_5_flash_google_ai_studio_exploratory_v2_20260826_101118\\predictions\\predictions_merged_v2.json",
+    "predictions_sha256":  "7F6EC3B041ED94596B6AC78848FB63EE50120007DB5E34026C0096D766F6664F",
+    "prediction_count":  219,
+    "unique_case_count":  73,
+    "private_gold_joined":  false,
+    "replacements":  [
+
+                     ],
+    "invalid_outputs":  [
+
+                        ],
+    "valid_for_complete_case_analysis":  true
+}

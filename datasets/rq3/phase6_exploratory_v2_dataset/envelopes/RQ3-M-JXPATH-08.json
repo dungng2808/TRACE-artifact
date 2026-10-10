@@ -1,0 +1,129 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-JXPATH-08",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-JXPATH-08",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-JxPath-1f",
+                                           "project":  "JxPath",
+                                           "repository_url":  "https://github.com/apache/commons-jxpath.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "fab38abb27f2f92b9340cfc232eb5517434bf138"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/case_variants/RQ3-M-JXPATH-08.java",
+                                          "artifact_sha256":  "f522de3ed33cc1bb7cb6051915c3af38bbefc3c892158339529f041c3be6410f"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "The developer test DOMModelTest.testGetNode evaluates several XPath expressions on a DOM-based JXPath context and asserts that the returned node types are correct: \u0027/\u0027 returns Document, \u0027/vendor/location\u0027 returns Element, \u0027//location/@name\u0027 returns Attr, and \u0027//vendor\u0027 returns Element. This exercises DOMNodePointer\u0027s ability to represent DOM nodes and return accurate node types during XPath evaluation.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.jxpath.ri.model.dom;\n\nimport junit.framework.Test;\nimport junit.framework.TestSuite;\nimport org.apache.commons.jxpath.AbstractFactory;\nimport org.apache.commons.jxpath.ri.model.XMLModelTestCase;\nimport org.apache.commons.jxpath.xml.DocumentContainer;\nimport org.w3c.dom.Attr;\nimport org.w3c.dom.Document;\nimport org.w3c.dom.Element;\nimport org.w3c.dom.Node;\nimport org.w3c.dom.NodeList;\n\n/**\n * Tests JXPath with DOM\n *\n * @author Dmitri Plotnikov\n * @version $Revision$ $Date$\n */\npublic class DOMModelTest extends XMLModelTestCase {\n\n    /**\n     * Construct a new instance of this test case.\n     *\n     * @param name Name of the test case\n     */\n    public DOMModelTest(String name) {\n        super(name);\n    }\n\n    /**\n     * Return the tests included in this test suite.\n     */\n    public static Test suite() {\n        return (new TestSuite(DOMModelTest.class));\n    }\n\n    protected String getModel() {\n        return DocumentContainer.MODEL_DOM;\n    }\n\n    protected AbstractFactory getAbstractFactory() {\n        return new TestDOMFactory();\n    }\n\n    public void testGetNode() {\n        assertXPathNodeType(context, \"/\", Document.class);\n        assertXPathNodeType(context, \"/vendor/location\", Element.class);\n        assertXPathNodeType(context, \"//location/@name\", Attr.class);\n        assertXPathNodeType(context, \"//vendor\", Element.class);\n    }\n\n    protected String getXMLSignature(Object node, boolean elements, boolean attributes, boolean text, boolean pi) {\n        StringBuffer buffer = new StringBuffer();\n        appendXMLSignature(buffer, node, elements, attributes, text, pi);\n        return buffer.toString();\n    }\n\n    private void appendXMLSignature(StringBuffer buffer, Object object, boolean elements, boolean attributes, boolean text, boolean pi) {\n        Node node = (Node) object;\n        int type = node.getNodeType();\n        switch(type) {\n            case Node.DOCUMENT_NODE:\n                buffer.append(\"\u003cD\u003e\");\n                appendXMLSignature(buffer, node.getChildNodes(), elements, attributes, text, pi);\n                buffer.append(\"\u003c/D\");\n                break;\n            case Node.ELEMENT_NODE:\n                String tag = elements ? ((Element) node).getTagName() : \"E\";\n                buffer.append(\"\u003c\");\n                buffer.append(tag);\n                buffer.append(\"\u003e\");\n                appendXMLSignature(buffer, node.getChildNodes(), elements, attributes, text, pi);\n                buffer.append(\"\u003c/\");\n                buffer.append(tag);\n                buffer.append(\"\u003e\");\n                break;\n            case Node.TEXT_NODE:\n            case Node.CDATA_SECTION_NODE:\n                if (text) {\n                    String string = node.getNodeValue();\n                    string = string.replace(\u0027\\n\u0027, \u0027=\u0027);\n                    buffer.append(string);\n                }\n                break;\n        }\n    }\n\n    private void appendXMLSignature(StringBuffer buffer, NodeList children, boolean elements, boolean attributes, boolean text, boolean pi) {\n        for (int i = 0; i \u003c children.getLength(); i++) {\n            appendXMLSignature(buffer, children.item(i), elements, attributes, text, pi);\n        }\n    }\n\n    private int rq3SharedInfrastructureFailure = RQ3_NONEXISTENT_SHARED_SYMBOL;\n}\n",
+                           "source_sha256":  "F522DE3ED33CC1BB7CB6051915C3AF38BBEFC3C892158339529F041C3BE6410F",
+                           "materialized_from":  "source_artifact/RQ3-M-JXPATH-08.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-JXPATH-08",
+                          "repository":  {
+                                             "project":  "JxPath",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\JxPath-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.jxpath.ri.model.dom.DOMModelTest::testGetNode",
+                          "focal_class":  "org.apache.commons.jxpath.ri.model.dom.DOMNodePointer",
+                          "collected_at":  "2026-08-17T10:15:51.2497444+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  54125,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "A44C1216B7FB325C12F2DC63D4434BA07FE098E418F97A490CDB14810C34066E",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted mutation evidence is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "r(4)));\n    [javac]                 ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:366: warning: [deprecation] Integer(int) in Integer has been deprecated\n    [javac]         assertXPathValue(context, \"integers[2]\", new Integer(2));\n    [javac]                                                  ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:398: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(descendant::node())\", new Double(65));\n    [javac]                                                                ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:401: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(descendant::root)\", new Double(0));\n    [javac]                                                              ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:403: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(descendant::name)\", new Double(7));\n    [javac]                                                              ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:437: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(1));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:440: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(nestedBean//.)\", new Double(7));\n    [javac]                                                           ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:443: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(//self::beans)\", new Double(2));\n    [javac]                                                           ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:449: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(66));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:458: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(21));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:463: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(7));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:471: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(8));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:476: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(1));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:482: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(8));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:487: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(1));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:493: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(53));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:498: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]             new Double(7));\n    [javac]             ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:503: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(/beans/..)\", new Double(1));\n    [javac]                                                       ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:505: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(//..)\", new Double(9));\n    [javac]                                                  ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/BeanModelTestCase.java:507: warning: [deprecation] Double(double) in Double has been deprecated\n    [javac]         assertXPathValue(context, \"count(//../..)\", new Double(2));\n    [javac]                                                     ^\n    [javac] /work/src/test/org/apache/commons/jxpath/ri/model/dom/DOMModelTest.java:111: error: cannot find symbol\n    [javac]     private int rq3SharedInfrastructureFailure = RQ3_NONEXISTENT_SHARED_SYMBOL;\n    [javac]                                                  ^\n    [javac]   symbol:   variable RQ3_NONEXISTENT_SHARED_SYMBOL\n    [javac]   location: class DOMModelTest\n    [javac] Note: Some input files additionally use or override a deprecated API.\n    [javac] Note: Some input files use unchecked or unsafe operations.\n    [javac] Note: Recompile with -Xlint:unchecked for details.\n    [javac] 1 error\n    [javac] 100 warnings\n\nBUILD FAILED\n/work/build.xml:110: Compile failed; see the compiler error output for details.\n\nTotal time: 19 seconds\nCannot compile tests! at /defects4j/framework/bin/d4j/d4j-compile line 83.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  ""
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

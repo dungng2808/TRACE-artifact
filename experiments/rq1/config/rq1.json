@@ -1,0 +1,48 @@
+{
+  "experimentId": "RQ1-OFFICIAL-V4-DEEPSEEK-FLASH-THINKING",
+  "mode": "Official",
+  "repositoryRoot": "Y:\\Ki 9\\SET490\\paper-2\\datasets\\rq1\\projecttest\\java-ready\\projects\\Train",
+  "outputRoot": "experiments/rq1",
+  "subjects": {
+    "datasetProjectsRoot": "datasets/rq1/sf110/java-ready/projects",
+    "benchmarkRevision": "SF110-20130704",
+    "pilotCount": 5,
+    "officialCount": 150,
+    "maxPerProject": 3,
+    "repetitions": 1,
+    "selectionSeed": 4902026,
+    "smokeCandidateKey": "Train|projecttest.Train.Train|compareTo(Train)|50",
+    "smokeFocalClass": "projecttest.Train.Train",
+    "smokeFocalMethodSignature": "compareTo(Train)"
+  },
+  "generation": {
+    "pipelineContractVersion": "rq1-pipeline-contract-v4",
+    "maxTestMethods": 6,
+    "maxOutputTokensPerCall": 65536,
+    "totalTokenCeilingPerRun": 131072,
+    "maxParallelLlmCalls": 4,
+    "repairEnabled": false
+  },
+  "llm": {
+    "provider": "deepseek",
+    "baseUrl": "",
+    "modelId": "deepseek-v4-flash",
+    "temperature": 0,
+    "timeoutSeconds": 600,
+    "deepSeekThinkingMode": "disabled",
+    "transportRetryCount": 2,
+    "apiKeyStrategy": "round-robin-failover"
+  },
+  "tools": {
+    "javaHome": "Y:\\Ki 9\\SET490\\paper-2\\JDK\\jdk-17.0.20\u002B8",
+    "modulePath": ".",
+    "compileTimeoutSeconds": 300,
+    "testTimeoutSeconds": 300,
+    "jacocoTimeoutSeconds": 300,
+    "pitTimeoutSeconds": 900,
+    "maxParallelToolRuns": 2,
+    "jacocoVersion": "0.8.15",
+    "pitVersion": "1.25.3"
+  },
+  "isFrozen": false
+}

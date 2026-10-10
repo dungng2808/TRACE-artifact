@@ -1,0 +1,138 @@
+{
+  "scope": "Recalculation from rounded paired export; not verification of historical execution or configuration",
+  "input_sha256": "C858F7F18162EE7BBDE30B351078ADFBE75B138F12CB7CCCE7819740E7C9904B",
+  "rows": 450,
+  "seed": 20260919,
+  "bootstrap_resamples": 2000,
+  "permutations": 10000,
+  "delivered": {
+    "VSR": {
+      "Metric": "VSR",
+      "FullChainMean": 0.5511111111111111,
+      "EvoSuiteMean": 0.288888888888889,
+      "PointEstimateDifference": 0.26222222222222213,
+      "StandardError": 0.06061758437964827,
+      "CiLower95": 0.14222222222222225,
+      "CiUpper95": 0.3835616438356162
+    },
+    "CSR": {
+      "Metric": "CSR",
+      "FullChainMean": 0.5511111111111111,
+      "EvoSuiteMean": 0.288888888888889,
+      "PointEstimateDifference": 0.26222222222222213,
+      "StandardError": 0.06061758437964827,
+      "CiLower95": 0.14222222222222225,
+      "CiUpper95": 0.3835616438356162
+    },
+    "ESR": {
+      "Metric": "ESR",
+      "FullChainMean": 0.5511111111111111,
+      "EvoSuiteMean": 0.288888888888889,
+      "PointEstimateDifference": 0.26222222222222213,
+      "StandardError": 0.06061758437964827,
+      "CiLower95": 0.14222222222222225,
+      "CiUpper95": 0.3835616438356162
+    },
+    "STS": {
+      "Metric": "STS",
+      "FullChainMean": 47.33989733333333,
+      "EvoSuiteMean": 28.888888888888893,
+      "PointEstimateDifference": 18.45100844444444,
+      "StandardError": 5.588936020754992,
+      "CiLower95": 8.008659555555557,
+      "CiUpper95": 29.90768609271523
+    },
+    "BC": {
+      "Metric": "BC",
+      "FullChainMean": 42.22945311111111,
+      "EvoSuiteMean": 28.320105333333327,
+      "PointEstimateDifference": 13.909347777777786,
+      "StandardError": 5.69766581968481,
+      "CiLower95": 3.199548026315789,
+      "CiUpper95": 25.6896567816092
+    },
+    "MS": {
+      "Metric": "MS",
+      "FullChainMean": 44.03320844444445,
+      "EvoSuiteMean": 26.888888888888886,
+      "PointEstimateDifference": 17.144319555555562,
+      "StandardError": 5.523778308516214,
+      "CiLower95": 6.8294424628450106,
+      "CiUpper95": 28.229350318471337
+    }
+  },
+  "candidate": {
+    "STS": {
+      "Metric": "STS",
+      "FullChainMean": 75.96664155555555,
+      "EvoSuiteMean": 45.786199333333336,
+      "PointEstimateDifference": 30.18044222222222,
+      "StandardError": 5.396284100595447,
+      "CiLower95": 19.769957657657653,
+      "CiUpper95": 41.15719882629107
+    },
+    "BC": {
+      "Metric": "BC",
+      "FullChainMean": 70.84311488888889,
+      "EvoSuiteMean": 46.25090400000001,
+      "PointEstimateDifference": 24.59221088888888,
+      "StandardError": 5.622373566916316,
+      "CiLower95": 13.538369002123142,
+      "CiUpper95": 36.12226291390728
+    },
+    "MS": {
+      "Metric": "MS",
+      "FullChainMean": 61.758027555555564,
+      "EvoSuiteMean": 41.12073133333334,
+      "PointEstimateDifference": 20.637296222222226,
+      "StandardError": 5.416951502040755,
+      "CiLower95": 10.145805208333332,
+      "CiUpper95": 31.415397315436234
+    }
+  },
+  "permutation": {
+    "VSR": {
+      "Metric": "VSR",
+      "ObservedDifference": 0.2622222222222221,
+      "PermutationPValue": 9.999000099990002E-05,
+      "PermutationCount": 10000
+    },
+    "CSR": {
+      "Metric": "CSR",
+      "ObservedDifference": 0.2622222222222221,
+      "PermutationPValue": 9.999000099990002E-05,
+      "PermutationCount": 10000
+    },
+    "ESR": {
+      "Metric": "ESR",
+      "ObservedDifference": 0.2622222222222221,
+      "PermutationPValue": 9.999000099990002E-05,
+      "PermutationCount": 10000
+    },
+    "STS": {
+      "Metric": "STS",
+      "ObservedDifference": 18.451008444444447,
+      "PermutationPValue": 0.00019998000199980003,
+      "PermutationCount": 10000
+    },
+    "BC": {
+      "Metric": "BC",
+      "ObservedDifference": 13.909347777777775,
+      "PermutationPValue": 0.0006999300069993001,
+      "PermutationCount": 10000
+    },
+    "MS": {
+      "Metric": "MS",
+      "ObservedDifference": 17.14431955555555,
+      "PermutationPValue": 0.00019998000199980003,
+      "PermutationCount": 10000
+    }
+  },
+  "holm": {
+    "CSR": 0.0004999500049995,
+    "ESR": 0.0004999500049995,
+    "STS": 0.0005999400059994001,
+    "MS": 0.0005999400059994001,
+    "BC": 0.0006999300069993001
+  }
+}

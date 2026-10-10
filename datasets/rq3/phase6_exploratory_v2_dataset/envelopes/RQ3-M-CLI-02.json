@@ -1,0 +1,129 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-CLI-02",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-CLI-02",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Cli-1f",
+                                           "project":  "Cli",
+                                           "repository_url":  "https://github.com/apache/commons-cli.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "b0e1b80b6d4a10a9c9f46539bc4c7a3cce55886e"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/case_variants/RQ3-M-CLI-02.java",
+                                          "artifact_sha256":  "4dd372351873923056e990c94293d7c2170b3ae97bdb8d3378aad71e42b34cd0"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.cli.CommandLine",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Scenario expressed by developer test org.apache.commons.cli.bug.BugCLI13Test::testCLI13.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.cli.bug.BugCLI13Test::testCLI13.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.cli.CommandLine"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n * \n *      http://www.apache.org/licenses/LICENSE-2.0\n * \n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\npackage org.apache.commons.cli.bug;\n\nimport junit.framework.TestCase;\nimport org.apache.commons.cli.CommandLine;\nimport org.apache.commons.cli.Option;\nimport org.apache.commons.cli.OptionBuilder;\nimport org.apache.commons.cli.Options;\nimport org.apache.commons.cli.ParseException;\nimport org.apache.commons.cli.PosixParser;\n\n/**\n * @author brianegge\n */\npublic class BugCLI13Test extends TestCase {\n\n    public void testCLI13() throws ParseException {\n        RQ3_NONEXISTENT_LOCAL_SYMBOL();\n        final String debugOpt = \"debug\";\n        Option debug = OptionBuilder.withArgName(debugOpt).withDescription(\"turn on debugging\").withLongOpt(debugOpt).hasArg().create(\u0027d\u0027);\n        Options options = new Options();\n        options.addOption(debug);\n        CommandLine commandLine = new PosixParser().parse(options, new String[] { \"-d\", \"true\" });\n        assertEquals(\"true\", commandLine.getOptionValue(debugOpt));\n        assertEquals(\"true\", commandLine.getOptionValue(\u0027d\u0027));\n        assertTrue(commandLine.hasOption(\u0027d\u0027));\n        assertTrue(commandLine.hasOption(debugOpt));\n    }\n}\n",
+                           "source_sha256":  "4DD372351873923056E990C94293D7C2170B3AE97BDB8D3378AAD71E42B34CD0",
+                           "materialized_from":  "source_artifact/RQ3-M-CLI-02.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-CLI-02",
+                          "repository":  {
+                                             "project":  "Cli",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Cli-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.cli.bug.BugCLI13Test::testCLI13",
+                          "focal_class":  "org.apache.commons.cli.CommandLine",
+                          "collected_at":  "2026-08-17T08:59:30.9297945+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  12518,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "E74FF0BB2C7A3F8A3538955DC91185E7F323A3B1A59E957B293D006B63C91BBC",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted mutation evidence is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ FAIL\nExecuted command:  cd /work \u0026\u0026 /defects4j/major/bin/ant -f /defects4j/framework/projects/defects4j.build.xml -Dd4j.home=/defects4j -Dd4j.dir.projects=/defects4j/framework/projects -Dbasedir=/work  compile.tests 2\u003e\u00261\nBuildfile: /defects4j/framework/projects/defects4j.build.xml\n\ninit:\n\njunit-present:\n\nsetProxy:\n\nnoProxy:\n     [echo] Proxy not used.\n\nget-custom-dep-commons-lang.jar:\n\nget-dep-commons-lang.jar:\n      [get] Getting: file:/defects4j/framework/projects/Cli/lib/commons-lang/commons-lang/2.1/commons-lang-2.1.jar\n      [get] To: /work/target/lib/commons-lang/jars/commons-lang-2.1.jar\n\nget-custom-dep-junit.jar:\n      [get] Getting: file:/defects4j/framework/projects/lib/junit-4.12.jar\n      [get] To: /work/target/lib/junit/jars/junit-3.8.1.jar\n      [get] Error getting file:/defects4j/framework/projects/lib/junit-4.12.jar to /work/target/lib/junit/jars/junit-3.8.1.jar\n\nget-dep-junit.jar:\n\nget-deps:\n\ncompile:\n    [javac] /work/build.xml:72: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n\ncompile.tests:\n    [mkdir] Created dir: /work/target/test-classes\n    [javac] /work/build.xml:141: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n    [javac] Compiling 18 source files to /work/target/test-classes\n    [javac] warning: [options] bootstrap class path not set in conjunction with -source 6\n    [javac] warning: [options] source value 6 is obsolete and will be removed in a future release\n    [javac] warning: [options] target value 1.6 is obsolete and will be removed in a future release\n    [javac] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.\n    [javac] /work/src/test/org/apache/commons/cli/OptionBuilderTest.java:43: warning: [deprecation] Float(float) in Float has been deprecated\n    [javac]                                      .withType( new Float( 10 ) )\n    [javac]                                                 ^\n    [javac] /work/src/test/org/apache/commons/cli/OptionBuilderTest.java:61: warning: [deprecation] Float(float) in Float has been deprecated\n    [javac]                                      .withType( new Float( 10 ) )\n    [javac]                                                 ^\n    [javac] /work/src/test/org/apache/commons/cli/PatternOptionBuilderTest.java:70: warning: [deprecation] Float(double) in Float has been deprecated\n    [javac]            assertEquals(\"number flag n\", new Float(4.5), line.getOptionObject(\"n\"));\n    [javac]                                          ^\n    [javac] /work/src/test/org/apache/commons/cli/PatternOptionBuilderTest.java:71: warning: [deprecation] Float(double) in Float has been deprecated\n    [javac]            assertEquals(\"number flag n\", new Float(4.5), line.getOptionObject(\u0027n\u0027));\n    [javac]                                          ^\n    [javac] /work/src/test/org/apache/commons/cli/bug/BugCLI13Test.java:33: error: cannot find symbol\n    [javac]         RQ3_NONEXISTENT_LOCAL_SYMBOL();\n    [javac]         ^\n    [javac]   symbol:   method RQ3_NONEXISTENT_LOCAL_SYMBOL()\n    [javac]   location: class BugCLI13Test\n    [javac] Note: /work/src/test/org/apache/commons/cli/OptionsTest.java uses unchecked or unsafe operations.\n    [javac] Note: Recompile with -Xlint:unchecked for details.\n    [javac] 1 error\n    [javac] 8 warnings\n\nBUILD FAILED\n/work/build.xml:141: Compile failed; see the compiler error output for details.\n\nTotal time: 6 seconds\nCannot compile tests! at /defects4j/framework/bin/d4j/d4j-compile line 83.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  ""
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

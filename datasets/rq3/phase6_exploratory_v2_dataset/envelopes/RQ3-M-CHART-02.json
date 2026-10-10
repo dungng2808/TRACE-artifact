@@ -1,0 +1,129 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-CHART-02",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-CHART-02",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Chart-26f",
+                                           "project":  "Chart",
+                                           "repository_url":  "https://github.com/jfree/jfreechart.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "26f",
+                                         "resolved_revision":  "103"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/case_variants/RQ3-M-CHART-02.java",
+                                          "artifact_sha256":  "3bbd0eddbff10c475b1728a783cb779dbb065c8acc258130d146762c63ddfd1e"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.jfree.chart.axis.Axis",
+                                              "candidate_method":  "draw(Graphics2D, double, Rectangle2D, Rectangle2D, RectangleEdge, PlotRenderingInfo)",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Scenario expressed by developer test org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.jfree.chart.axis.Axis"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo",
+                           "source_text":  "/* ===========================================================\n * JFreeChart : a free chart library for the Java(tm) platform\n * ===========================================================\n *\n * (C) Copyright 2000-2007, by Object Refinery Limited and Contributors.\n *\n * Project Info:  http://www.jfree.org/jfreechart/index.html\n *\n * This library is free software; you can redistribute it and/or modify it \n * under the terms of the GNU Lesser General Public License as published by \n * the Free Software Foundation; either version 2.1 of the License, or \n * (at your option) any later version.\n *\n * This library is distributed in the hope that it will be useful, but \n * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY \n * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public \n * License for more details.\n *\n * You should have received a copy of the GNU Lesser General Public\n * License along with this library; if not, write to the Free Software\n * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, \n * USA.  \n *\n * [Java is a trademark or registered trademark of Sun Microsystems, Inc. \n * in the United States and other countries.]\n *\n * -------------------\n * AreaChartTests.java\n * -------------------\n * (C) Copyright 2005, 2007, by Object Refinery Limited.\n *\n * Original Author:  David Gilbert (for Object Refinery Limited);\n * Contributor(s):   -;\n *\n * $Id: AreaChartTests.java,v 1.1.2.2 2007/03/02 11:16:21 mungady Exp $\n *\n * Changes:\n * --------\n * 12-Apr-2005 : Version 1 (DG);\n * 27-Jun-2007 : Updated for method name change in CategoryItemRenderer\n *               interface (DG);\n */\npackage org.jfree.chart.junit;\n\nimport java.awt.Graphics2D;\nimport java.awt.geom.Rectangle2D;\nimport java.awt.image.BufferedImage;\nimport junit.framework.Test;\nimport junit.framework.TestCase;\nimport junit.framework.TestSuite;\nimport org.jfree.chart.ChartFactory;\nimport org.jfree.chart.JFreeChart;\nimport org.jfree.chart.axis.ValueAxis;\nimport org.jfree.chart.event.ChartChangeEvent;\nimport org.jfree.chart.event.ChartChangeListener;\nimport org.jfree.chart.labels.CategoryToolTipGenerator;\nimport org.jfree.chart.labels.StandardCategoryToolTipGenerator;\nimport org.jfree.chart.plot.CategoryPlot;\nimport org.jfree.chart.plot.PlotOrientation;\nimport org.jfree.chart.renderer.category.CategoryItemRenderer;\nimport org.jfree.chart.urls.CategoryURLGenerator;\nimport org.jfree.chart.urls.StandardCategoryURLGenerator;\nimport org.jfree.data.Range;\nimport org.jfree.data.category.CategoryDataset;\nimport org.jfree.data.general.DatasetUtilities;\n\n/**\n * Tests for an area chart.\n */\npublic class AreaChartTests extends TestCase {\n\n    /**\n     * A chart.\n     */\n    private JFreeChart chart;\n\n    /**\n     * Returns the tests as a test suite.\n     *\n     * @return The test suite.\n     */\n    public static Test suite() {\n        return new TestSuite(AreaChartTests.class);\n    }\n\n    /**\n     * Constructs a new set of tests.\n     *\n     * @param name  the name of the tests.\n     */\n    public AreaChartTests(String name) {\n        super(name);\n    }\n\n    /**\n     * Common test setup.\n     */\n    protected void setUp() {\n        this.chart = createAreaChart();\n    }\n\n    /**\n     * Check that setting a tool tip generator for a series does override the\n     * default generator.\n     */\n    public void testSetSeriesToolTipGenerator() {\n        CategoryPlot plot = (CategoryPlot) this.chart.getPlot();\n        CategoryItemRenderer renderer = plot.getRenderer();\n        StandardCategoryToolTipGenerator tt = new StandardCategoryToolTipGenerator();\n        renderer.setSeriesToolTipGenerator(0, tt);\n        CategoryToolTipGenerator tt2 = renderer.getToolTipGenerator(0, 0);\n        assertTrue(tt2 == tt);\n    }\n\n    /**\n     * Check that setting a URL generator for a series does override the\n     * default generator.\n     */\n    public void testSetSeriesURLGenerator() {\n        CategoryPlot plot = (CategoryPlot) this.chart.getPlot();\n        CategoryItemRenderer renderer = plot.getRenderer();\n        StandardCategoryURLGenerator url1 = new StandardCategoryURLGenerator();\n        renderer.setSeriesURLGenerator(0, url1);\n        CategoryURLGenerator url2 = renderer.getURLGenerator(0, 0);\n        assertTrue(url2 == url1);\n    }\n\n    /**\n     * Draws the chart with a null info object to make sure that no exceptions\n     * are thrown (a problem that was occurring at one point).\n     */\n    public void testDrawWithNullInfo() {\n        RQ3_NONEXISTENT_LOCAL_SYMBOL();\n        boolean success = false;\n        try {\n            BufferedImage image = new BufferedImage(200, 100, BufferedImage.TYPE_INT_RGB);\n            Graphics2D g2 = image.createGraphics();\n            this.chart.draw(g2, new Rectangle2D.Double(0, 0, 200, 100), null, null);\n            g2.dispose();\n            success = true;\n        } catch (Exception e) {\n            success = false;\n        }\n        assertTrue(success);\n    }\n\n    /**\n     * Replaces the chart\u0027s dataset and then checks that the new dataset is OK.\n     */\n    public void testReplaceDataset() {\n        Number[][] data = new Integer[][] { { new Integer(-30), new Integer(-20) }, { new Integer(-10), new Integer(10) }, { new Integer(20), new Integer(30) } };\n        CategoryDataset newData = DatasetUtilities.createCategoryDataset(\"S\", \"C\", data);\n        LocalListener l = new LocalListener();\n        this.chart.addChangeListener(l);\n        CategoryPlot plot = (CategoryPlot) this.chart.getPlot();\n        plot.setDataset(newData);\n        assertEquals(true, l.flag);\n        ValueAxis axis = plot.getRangeAxis();\n        Range range = axis.getRange();\n        assertTrue(\"Expecting the lower bound of the range to be around -30: \" + range.getLowerBound(), range.getLowerBound() \u003c= -30);\n        assertTrue(\"Expecting the upper bound of the range to be around 30: \" + range.getUpperBound(), range.getUpperBound() \u003e= 30);\n    }\n\n    /**\n     * Create an area chart with sample data in the range -3 to +3.\n     *\n     * @return The chart.\n     */\n    private static JFreeChart createAreaChart() {\n        Number[][] data = new Integer[][] { { new Integer(-3), new Integer(-2) }, { new Integer(-1), new Integer(1) }, { new Integer(2), new Integer(3) } };\n        CategoryDataset dataset = DatasetUtilities.createCategoryDataset(\"S\", \"C\", data);\n        return ChartFactory.createAreaChart(\"Area Chart\", \"Domain\", \"Range\", dataset, PlotOrientation.HORIZONTAL, true, true, true);\n    }\n\n    /**\n     * A chart change listener.\n     */\n    static class LocalListener implements ChartChangeListener {\n\n        /**\n         * A flag.\n         */\n        private boolean flag = false;\n\n        /**\n         * Event handler.\n         *\n         * @param event  the event.\n         */\n        public void chartChanged(ChartChangeEvent event) {\n            this.flag = true;\n        }\n    }\n}\n",
+                           "source_sha256":  "3BBD0EDDBFF10C475B1728A783CB779DBB065C8ACC258130D146762C63DDFD1E",
+                           "materialized_from":  "source_artifact/RQ3-M-CHART-02.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-CHART-02",
+                          "repository":  {
+                                             "project":  "Chart",
+                                             "revision":  "26f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Chart-26f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo",
+                          "focal_class":  "org.jfree.chart.axis.Axis",
+                          "collected_at":  "2026-08-17T09:44:14.2571849+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  196639,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "BB7E0E8E42AA083BC6AB6F270AB0D41438B732F60CE4CDE9C4A3D66C2E85E686",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted mutation evidence is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ FAIL\nExecuted command:  cd /work \u0026\u0026 /defects4j/major/bin/ant -f /defects4j/framework/projects/defects4j.build.xml -Dd4j.home=/defects4j -Dd4j.dir.projects=/defects4j/framework/projects -Dbasedir=/work  compile.tests 2\u003e\u00261\nBuildfile: /defects4j/framework/projects/defects4j.build.xml\n\ninitialise:\n\ncompile:\n    [javac] /defects4j/framework/projects/Chart/Chart.build.xml:57: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n\ncompile-experimental:\n    [javac] /defects4j/framework/projects/Chart/Chart.build.xml:106: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n    [javac] Compiling 27 source files to /work/build\n    [javac] warning: [options] bootstrap class path not set in conjunction with -source 6\n    [javac] warning: [options] source value 6 is obsolete and will be removed in a future release\n    [javac] warning: [options] target value 1.6 is obsolete and will be removed in a future release\n    [javac] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.\n    [javac] Note: Some input files use or override a deprecated API.\n    [javac] Note: Recompile with -Xlint:deprecation for details.\n    [javac] Note: Some input files use unchecked or unsafe operations.\n    [javac] Note: Recompile with -Xlint:unchecked for details.\n    [javac] 4 warnings\n\ncompile.tests:\n    [mkdir] Created dir: /work/build-tests\n    [javac] /defects4j/framework/projects/Chart/Chart.build.xml:123: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n    [javac] Compiling 329 source files to /work/build-tests\n    [javac] warning: [options] bootstrap class path not set in conjunction with -source 6\n    [javac] warning: [options] source value 6 is obsolete and will be removed in a future release\n    [javac] warning: [options] target value 1.6 is obsolete and will be removed in a future release\n    [javac] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.\n    [javac] /work/tests/org/jfree/chart/junit/AreaChartTests.java:133: error: cannot find symbol\n    [javac]         RQ3_NONEXISTENT_LOCAL_SYMBOL();\n    [javac]         ^\n    [javac]   symbol:   method RQ3_NONEXISTENT_LOCAL_SYMBOL()\n    [javac]   location: class AreaChartTests\n    [javac] Note: Some input files use or override a deprecated API.\n    [javac] Note: Recompile with -Xlint:deprecation for details.\n    [javac] Note: Some input files use unchecked or unsafe operations.\n    [javac] Note: Recompile with -Xlint:unchecked for details.\n    [javac] 1 error\n    [javac] 4 warnings\n\nBUILD FAILED\n/defects4j/framework/projects/Chart/Chart.build.xml:123: Compile failed; see the compiler error output for details.\n\nTotal time: 1 minute 40 seconds\nCannot compile tests! at /defects4j/framework/bin/d4j/d4j-compile line 83.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  ""
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

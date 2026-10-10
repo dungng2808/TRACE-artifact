@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FullChain.Contracts\FullChain.Contracts.csproj" />
+    <ProjectReference Include="..\FullChain.Core\FullChain.Core.csproj" />
+    <ProjectReference Include="..\..\Rq2Experiment\RQ2Experiment.Core\RQ2Experiment.Core.csproj" />
+    <ProjectReference Include="..\..\Rq2Experiment\RQ2Experiment.Infrastructure\RQ2Experiment.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
+

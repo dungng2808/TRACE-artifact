@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rq1Experiment.Contracts\Rq1Experiment.Contracts.csproj" />
+    <ProjectReference Include="..\Rq1Experiment.Core\Rq1Experiment.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Prompts/Templates/**/*.*" />
+  </ItemGroup>
+</Project>

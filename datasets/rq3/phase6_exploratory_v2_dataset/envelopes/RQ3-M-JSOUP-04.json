@@ -1,0 +1,146 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-JSOUP-04",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-JSOUP-04",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Jsoup-1f",
+                                           "project":  "Jsoup",
+                                           "repository_url":  "https://github.com/jhy/jsoup.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "27a52f90a25699bebe23ff1ff94d6db361fdb11d"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.jsoup.parser.ParserTest::createsStructureFromBodySnippet",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-JSOUP-base-test.java",
+                                          "artifact_sha256":  "d5f1c0b73bde3b4c2f03bab4e545aea62c805d91dbb60b70321f45a27ec41d67"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.jsoup.nodes.Document",
+                                              "candidate_method":  "normalise()",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Declared plan: Controlled plan declaration: evaluate whether the retained test createsStructureFromBodySnippet conforms to the declared focal target org.jsoup.nodes.Document and scenario. The generated test must exercise the declared focal behavior rather than a different input path or behavior.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.jsoup.parser.ParserTest::createsStructureFromBodySnippet.",
+                                         "expected_observation":  "The generated test must demonstrate the behavior declared above at the stated focal target; assertions about a different behavior do not satisfy the plan.",
+                                         "structural_target":  "org.jsoup.nodes.Document"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.jsoup.parser.ParserTest::createsStructureFromBodySnippet",
+                           "source_text":  "package org.jsoup.parser;\n\nimport org.jsoup.Jsoup;\nimport org.jsoup.TextUtil;\nimport org.jsoup.nodes.Comment;\nimport org.jsoup.nodes.Document;\nimport org.jsoup.nodes.Element;\nimport org.jsoup.nodes.TextNode;\nimport org.jsoup.select.Elements;\nimport org.junit.Test;\n\nimport java.util.List;\n\nimport static org.junit.Assert.*;\n\n/**\n Tests for the Parser\n\n @author Jonathan Hedley, jonathan@hedley.net */\npublic class ParserTest {\n\n    @Test public void parsesSimpleDocument() {\n        String html = \"\u003chtml\u003e\u003chead\u003e\u003ctitle\u003eFirst!\u003c/title\u003e\u003c/head\u003e\u003cbody\u003e\u003cp\u003eFirst post! \u003cimg src=\\\"foo.png\\\" /\u003e\u003c/p\u003e\u003c/body\u003e\u003c/html\u003e\";\n        Document doc = Jsoup.parse(html);\n        // need a better way to verify these:\n        Element p = doc.body().child(0);\n        assertEquals(\"p\", p.tagName());\n        Element img = p.child(0);\n        assertEquals(\"foo.png\", img.attr(\"src\"));\n        assertEquals(\"img\", img.tagName());\n    }\n\n    @Test public void parsesRoughAttributes() {\n        String html = \"\u003chtml\u003e\u003chead\u003e\u003ctitle\u003eFirst!\u003c/title\u003e\u003c/head\u003e\u003cbody\u003e\u003cp class=\\\"foo \u003e bar\\\"\u003eFirst post! \u003cimg src=\\\"foo.png\\\" /\u003e\u003c/p\u003e\u003c/body\u003e\u003c/html\u003e\";\n        Document doc = Jsoup.parse(html);\n\n        // need a better way to verify these:\n        Element p = doc.body().child(0);\n        assertEquals(\"p\", p.tagName());\n        assertEquals(\"foo \u003e bar\", p.attr(\"class\"));\n    }\n\n    @Test public void parsesComments() {\n        String html = \"\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003cimg src=foo\u003e\u003c!-- \u003ctable\u003e\u003ctr\u003e\u003ctd\u003e\u003c/table\u003e --\u003e\u003cp\u003eHello\u003c/p\u003e\u003c/body\u003e\u003c/html\u003e\";\n        Document doc = Jsoup.parse(html);\n        \n        Element body = doc.body();\n        Comment comment = (Comment) body.childNode(1); // comment should not be sub of img, as it\u0027s an empty tag\n        assertEquals(\" \u003ctable\u003e\u003ctr\u003e\u003ctd\u003e\u003c/table\u003e \", comment.getData());\n        Element p = body.child(1);\n        TextNode text = (TextNode) p.childNode(0);\n        assertEquals(\"Hello\", text.getWholeText());\n    }\n\n    @Test public void parsesUnterminatedComments() {\n        String html = \"\u003cp\u003eHello\u003c!-- \u003ctr\u003e\u003ctd\u003e\";\n        Document doc = Jsoup.parse(html);\n        Element p = doc.getElementsByTag(\"p\").get(0);\n        assertEquals(\"Hello\", p.text());\n        TextNode text = (TextNode) p.childNode(0);\n        assertEquals(\"Hello\", text.getWholeText());\n        Comment comment = (Comment) p.childNode(1);\n        assertEquals(\" \u003ctr\u003e\u003ctd\u003e\", comment.getData());\n    }\n\n    @Test public void parsesUnterminatedTag() {\n        String h1 = \"\u003cp\";\n        Document doc = Jsoup.parse(h1);\n        assertEquals(1, doc.getElementsByTag(\"p\").size());\n\n        String h2 = \"\u003cdiv id=1\u003cp id=\u00272\u0027\";\n        doc = Jsoup.parse(h2);\n        Element d = doc.getElementById(\"1\");\n        assertEquals(1, d.children().size());\n        Element p = doc.getElementById(\"2\");\n        assertNotNull(p);\n    }\n\n    @Test public void parsesUnterminatedAttribute() {\n        String h1 = \"\u003cp id=\\\"foo\";\n        Document doc = Jsoup.parse(h1);\n        Element p = doc.getElementById(\"foo\");\n        assertNotNull(p);\n        assertEquals(\"p\", p.tagName());\n    }\n\n    @Test public void createsDocumentStructure() {\n        String html = \"\u003cmeta name=keywords /\u003e\u003clink rel=stylesheet /\u003e\u003ctitle\u003ejsoup\u003c/title\u003e\u003cp\u003eHello world\u003c/p\u003e\";\n        Document doc = Jsoup.parse(html);\n        Element head = doc.head();\n        Element body = doc.body();\n\n        assertEquals(1, doc.children().size()); // root node: contains html node\n        assertEquals(2, doc.child(0).children().size()); // html node: head and body\n        assertEquals(3, head.children().size());\n        assertEquals(1, body.children().size());\n\n        assertEquals(\"keywords\", head.getElementsByTag(\"meta\").get(0).attr(\"name\"));\n        assertEquals(0, body.getElementsByTag(\"meta\").size());\n        assertEquals(\"jsoup\", doc.title());\n        assertEquals(\"Hello world\", body.text());\n        assertEquals(\"Hello world\", body.children().get(0).text());\n    }\n\n    @Test public void createsStructureFromBodySnippet() {\n        // the bar baz stuff naturally goes into the body, but the \u0027foo\u0027 goes into root, and the normalisation routine\n        // needs to move into the start of the body\n        String html = \"foo \u003cb\u003ebar\u003c/b\u003e baz\";\n        Document doc = Jsoup.parse(html);\n        assertEquals (\"foo bar baz\", doc.text());\n\n    }\n\n    @Test public void handlesEscapedData() {\n        String html = \"\u003cdiv title=\u0027Surf \u0026amp; Turf\u0027\u003eReef \u0026amp; Beef\u003c/div\u003e\";\n        Document doc = Jsoup.parse(html);\n        Element div = doc.getElementsByTag(\"div\").get(0);\n\n        assertEquals(\"Surf \u0026 Turf\", div.attr(\"title\"));\n        assertEquals(\"Reef \u0026 Beef\", div.text());\n    }\n\n    @Test public void handlesDataOnlyTags() {\n        String t = \"\u003cstyle\u003efont-family: bold\u003c/style\u003e\";\n        List\u003cElement\u003e tels = Jsoup.parse(t).getElementsByTag(\"style\");\n        assertEquals(\"font-family: bold\", tels.get(0).data());\n        assertEquals(\"\", tels.get(0).text());\n\n        String s = \"\u003cp\u003eHello\u003c/p\u003e\u003cscript\u003eNope\u003c/script\u003e\u003cp\u003eThere\u003c/p\u003e\";\n        Document doc = Jsoup.parse(s);\n        assertEquals(\"Hello There\", doc.text());\n        assertEquals(\"Nope\", doc.data());\n    }\n    \n    @Test public void handlesTextArea() {\n        Document doc = Jsoup.parse(\"\u003ctextarea\u003eHello\u003c/textarea\u003e\");\n        Elements els = doc.select(\"textarea\");\n        assertEquals(\"Hello\", els.text());\n        assertEquals(\"Hello\", els.val());\n    }\n\n    @Test public void createsImplicitLists() {\n        String h = \"\u003cli\u003ePoint one\u003cli\u003ePoint two\";\n        Document doc = Jsoup.parse(h);\n        Elements ol = doc.select(\"ul\"); // should have created a default ul.\n        assertEquals(1, ol.size());\n        assertEquals(2, ol.get(0).children().size());\n\n        // no fiddling with non-implicit lists\n        String h2 = \"\u003col\u003e\u003cli\u003e\u003cp\u003ePoint the first\u003cli\u003e\u003cp\u003ePoint the second\";\n        Document doc2 = Jsoup.parse(h2);\n\n        assertEquals(0, doc2.select(\"ul\").size());\n        assertEquals(1, doc2.select(\"ol\").size());\n        assertEquals(2, doc2.select(\"ol li\").size());\n        assertEquals(2, doc2.select(\"ol li p\").size());\n        assertEquals(1, doc2.select(\"ol li\").get(0).children().size()); // one p in first li\n    }\n\n    @Test public void createsImplicitTable() {\n        String h = \"\u003ctd\u003eHello\u003ctd\u003e\u003cp\u003eThere\u003cp\u003enow\";\n        Document doc = Jsoup.parse(h);\n        assertEquals(\"\u003ctable\u003e\u003ctr\u003e\u003ctd\u003eHello\u003c/td\u003e\u003ctd\u003e\u003cp\u003eThere\u003c/p\u003e\u003cp\u003enow\u003c/p\u003e\u003c/td\u003e\u003c/tr\u003e\u003c/table\u003e\", TextUtil.stripNewlines(doc.body().html()));\n    }\n\n    @Test public void handlesBaseTags() {\n        String h = \"\u003ca href=1\u003e#\u003c/a\u003e\u003cbase href=\u0027/2/\u0027\u003e\u003ca href=\u00273\u0027\u003e#\u003c/a\u003e\u003cbase href=\u0027http://bar\u0027\u003e\u003ca href=4\u003e#\u003c/a\u003e\";\n        Document doc = Jsoup.parse(h, \"http://foo/\");\n        assertEquals(\"http://bar\", doc.baseUri()); // gets updated as base changes, so doc.createElement has latest.\n\n        Elements anchors = doc.getElementsByTag(\"a\");\n        assertEquals(3, anchors.size());\n\n        assertEquals(\"http://foo/\", anchors.get(0).baseUri());\n        assertEquals(\"http://foo/2/\", anchors.get(1).baseUri());\n        assertEquals(\"http://bar\", anchors.get(2).baseUri());\n\n        assertEquals(\"http://foo/1\", anchors.get(0).absUrl(\"href\"));\n        assertEquals(\"http://foo/2/3\", anchors.get(1).absUrl(\"href\"));\n        assertEquals(\"http://bar/4\", anchors.get(2).absUrl(\"href\"));\n    }\n\n    @Test public void handlesCdata() {\n        String h = \"\u003cdiv id=1\u003e\u003c![CData[\u003chtml\u003e\\n\u003cfoo\u003e\u003c\u0026amp;]]\u003e\u003c/div\u003e\"; // \"cdata\" insensitive. the \u0026amp; in there should remain literal\n        Document doc = Jsoup.parse(h);\n        Element div = doc.getElementById(\"1\");\n        assertEquals(\"\u003chtml\u003e \u003cfoo\u003e\u003c\u0026amp;\", div.text());\n        assertEquals(0, div.children().size());\n        assertEquals(1, div.childNodes().size()); // no elements, one text node\n    }\n\n    @Test public void handlesInvalidStartTags() {\n        String h = \"\u003cdiv\u003eHello \u003c There \u003c\u0026amp;\u003e\u003c/div\u003e\"; // parse to \u003cdiv {#text=Hello \u003c There \u003c\u0026\u003e}\u003e\n        Document doc = Jsoup.parse(h);\n        assertEquals(\"Hello \u003c There \u003c\u0026\u003e\", doc.select(\"div\").first().text());\n    }\n    \n    @Test public void handlesUnknownTags() {\n        String h = \"\u003cdiv\u003e\u003cfoo title=bar\u003eHello\u003cfoo title=qux\u003ethere\u003c/foo\u003e\u003c/div\u003e\";\n        Document doc = Jsoup.parse(h);\n        Elements foos = doc.select(\"foo\");\n        assertEquals(2, foos.size());\n        assertEquals(\"bar\", foos.first().attr(\"title\"));\n        assertEquals(\"qux\", foos.last().attr(\"title\"));\n        assertEquals(\"there\", foos.last().text());\n    }\n\n    @Test public void handlesUnknownInlineTags() {\n        String h = \"\u003cp\u003e\u003ccust\u003eTest\u003c/cust\u003e\u003c/p\u003e\u003cp\u003e\u003ccust\u003e\u003ccust\u003eTest\u003c/cust\u003e\u003c/cust\u003e\u003c/p\u003e\";\n        Document doc = Jsoup.parseBodyFragment(h);\n        String out = doc.body().html();\n        assertEquals(h, TextUtil.stripNewlines(out));\n    }\n    \n    @Test public void handlesEmptyBlocks() {\n        String h = \"\u003cdiv id=1/\u003e\u003cdiv id=2\u003e\u003cimg /\u003e\u003c/div\u003e\";\n        Document doc = Jsoup.parse(h);\n        Element div1 = doc.getElementById(\"1\");\n        assertTrue(div1.children().isEmpty());\n    }\n    \n    @Test public void handlesMultiClosingBody() {\n        String h = \"\u003cbody\u003e\u003cp\u003eHello\u003c/body\u003e\u003cp\u003ethere\u003c/p\u003e\u003c/body\u003e\u003c/body\u003e\u003c/html\u003e\u003cp\u003enow\";\n        Document doc = Jsoup.parse(h);\n        assertEquals(3, doc.select(\"p\").size());\n        assertEquals(3, doc.body().children().size());\n    }\n    \n    @Test public void handlesUnclosedDefinitionLists() {\n        String h = \"\u003cdt\u003eFoo\u003cdd\u003eBar\u003cdt\u003eQux\u003cdd\u003eZug\";\n        Document doc = Jsoup.parse(h);\n        assertEquals(4, doc.body().getElementsByTag(\"dl\").first().children().size());\n        Elements dts = doc.select(\"dt\");\n        assertEquals(2, dts.size());\n        assertEquals(\"Zug\", dts.get(1).nextElementSibling().text());\n    }\n\n    @Test public void handlesFrames() {\n        String h = \"\u003chtml\u003e\u003chead\u003e\u003cscript\u003e\u003c/script\u003e\u003cnoscript\u003e\u003c/noscript\u003e\u003c/head\u003e\u003cframeset\u003e\u003cframe src=foo\u003e\u003c/frame\u003e\u003cframe src=foo\u003e\u003c/frameset\u003e\u003c/html\u003e\";\n        Document doc = Jsoup.parse(h);\n        assertEquals(\"\u003chtml\u003e\u003chead\u003e\u003cscript\u003e\u003c/script\u003e\u003cnoscript\u003e\u003c/noscript\u003e\u003c/head\u003e\u003cframeset\u003e\u003cframe src=\\\"foo\\\" /\u003e\u003cframe src=\\\"foo\\\" /\u003e\u003c/frameset\u003e\u003cbody\u003e\u003c/body\u003e\u003c/html\u003e\",\n                TextUtil.stripNewlines(doc.html()));\n    }\n\n    @Test public void handlesJavadocFont() {\n        String h = \"\u003cTD BGCOLOR=\\\"#EEEEFF\\\" CLASS=\\\"NavBarCell1\\\"\u003e    \u003cA HREF=\\\"deprecated-list.html\\\"\u003e\u003cFONT CLASS=\\\"NavBarFont1\\\"\u003e\u003cB\u003eDeprecated\u003c/B\u003e\u003c/FONT\u003e\u003c/A\u003e\u0026nbsp;\u003c/TD\u003e\";\n        Document doc = Jsoup.parse(h);\n        Element a = doc.select(\"a\").first();\n        assertEquals(\"Deprecated\", a.text());\n        assertEquals(\"font\", a.child(0).tagName());\n        assertEquals(\"b\", a.child(0).child(0).tagName());\n    }\n\n    @Test public void handlesBaseWithoutHref() {\n        String h = \"\u003chead\u003e\u003cbase target=\u0027_blank\u0027\u003e\u003c/head\u003e\u003cbody\u003e\u003ca href=/foo\u003eTest\u003c/a\u003e\u003c/body\u003e\";\n        Document doc = Jsoup.parse(h, \"http://example.com/\");\n        Element a = doc.select(\"a\").first();\n        assertEquals(\"/foo\", a.attr(\"href\"));\n        assertEquals(\"http://example.com/foo\", a.attr(\"abs:href\"));\n    }\n\n    @Test public void normalisesDocument() {}\n// Defects4J: flaky method\n//     @Test public void normalisesDocument() {\n//         String h = \"\u003c!doctype html\u003eOne\u003chtml\u003eTwo\u003chead\u003eThree\u003clink\u003e\u003c/head\u003eFour\u003cbody\u003eFive \u003c/body\u003eSix \u003c/html\u003eSeven \";\n//         Document doc = Jsoup.parse(h);\n//         assertEquals(\"\u003c!doctype html\u003e\u003chtml\u003e\u003chead\u003e\u003clink /\u003e\u003c/head\u003e\u003cbody\u003eFive Six Seven  One Two Four Three\u003c/body\u003e\u003c/html\u003e\",\n//                 TextUtil.stripNewlines(doc.html())); // is spaced OK if not newline \u0026 space stripped\n//     }\n\n    @Test public void normalisesEmptyDocument() {\n        Document doc = Jsoup.parse(\"\");\n        assertEquals(\"\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003c/body\u003e\u003c/html\u003e\",TextUtil.stripNewlines(doc.html()));\n    }\n\n    @Test public void normalisesHeadlessBody() {\n        Document doc = Jsoup.parse(\"\u003chtml\u003e\u003cbody\u003e\u003cspan class=\\\"foo\\\"\u003ebar\u003c/span\u003e\");\n        assertEquals(\"\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003cspan class=\\\"foo\\\"\u003ebar\u003c/span\u003e\u003c/body\u003e\u003c/html\u003e\",\n                TextUtil.stripNewlines(doc.html()));\n    }\n\n\n}\n",
+                           "source_sha256":  "D5F1C0B73BDE3B4C2F03BAB4E545AEA62C805D91DBB60B70321F45A27EC41D67",
+                           "materialized_from":  "source_artifact/RQ3-M-JSOUP-04.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-JSOUP-04",
+                          "repository":  {
+                                             "project":  "Jsoup",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Jsoup-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.jsoup.parser.ParserTest::createsStructureFromBodySnippet",
+                          "focal_class":  "org.jsoup.nodes.Document",
+                          "collected_at":  "2026-08-17T10:42:19.0884791+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  10618,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "C93682CE5D62F8FDA98E6C3F9B27DA261AE37EFEF35691C2857A7099498DFB90",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  5097,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "A26A2FDFE16051DBD42F6F7C19A301A2A126B93F5FE42CF8014303231DA682E3",
+                                                "stderr_sha256":  "CDB8C5245C063A34668CDBAF812D0BEDCC14491CE03336A5E3AFBFFDEBE0261F",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  11080,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "68FC622244740BB832D1B6041FC7F9A4ABE44174472164B896852764C0A6E326",
+                                                "stderr_sha256":  "2C20A0C303AC26033EA70CA17B8025ACD9FC61A4A42C8C19F3D7F97237FBDEAD",
+                                                "artifacts":  [
+                                                                  "coverage_summary.csv"
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  20144,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "4B4AB9D3A1EC63320A8072DCA506336E85E24A76EF2053197B9B69DA2125AE12",
+                                                "stderr_sha256":  "DB23C7E6853D0D6425F89966983358B86CAE2EE40805786C2C1738BE98F7EBA3",
+                                                "artifacts":  [
+                                                                  "mutation_kill.csv",
+                                                                  "mutation_mutants.log",
+                                                                  "mutation_major.log"
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "TRUE",
+                                           "lines_total":  46,
+                                           "lines_covered":  24,
+                                           "conditions_total":  18,
+                                           "conditions_covered":  10,
+                                           "evidence_status":  "AVAILABLE",
+                                           "note":  "Defects4J targeted coverage instrumented the declared focal class. This is class-level reachability; method-level attribution requires a separately validated JaCoCo resolver."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  11,
+                                           "evidence_status":  "REVIEW_REQUIRED",
+                                           "note":  "Live mutants were extracted, but relevance/non-equivalence is an independent human-gold decision; the harness never infers it automatically.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ OK\n",
+                                              "junit":  "Running ant (compile.tests)................................................ OK\nRunning ant (run.dev.tests)................................................ OK\n",
+                                              "coverage":  "Running ant (compile.tests)................................................ OK\nRunning ant (coverage.instrument).......................................... OK\nRunning ant (run.dev.tests)................................................ OK\nRunning ant (coverage.report).............................................. OK\n",
+                                              "mutation":  "Compiling mutant definition (mml).......................................... OK\nRunning ant (mutate)....................................................... OK\nRunning ant (compile.tests)................................................ OK\nRunning ant (mutation.test)................................................ OK\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

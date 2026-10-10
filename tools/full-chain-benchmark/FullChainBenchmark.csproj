@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>FullChain.Benchmark</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FullChainFramework\FullChain.Contracts\FullChain.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\FullChainFramework\FullChain.Core\FullChain.Core.csproj" />
+    <ProjectReference Include="..\..\src\FullChainFramework\FullChain.Infrastructure\FullChain.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
+

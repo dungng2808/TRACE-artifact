@@ -1,0 +1,57 @@
+{
+  "scope": "Archived commands and terminal accounting, not an experimental rerun or a full raw-evidence audit",
+  "archive": "official-150-20260920-r42-r44-v1.zip",
+  "archive_size_bytes": 9814962042,
+  "archive_root": "official-150-20260920-r42-r44-v1/",
+  "zip_member_count_including_macos_metadata": 2699394,
+  "archived_paired_csv_sha256": "c858f7f18162ee7bbde30b351078adfbe75b138f12cb7ccce7819740e7c9904b",
+  "external_paired_csv_sha256": "c858f7f18162ee7bbde30b351078adfbe75b138f12cb7ccce7819740e7c9904b",
+  "paired_csv_byte_identical": true,
+  "raw_records_sha256": "f6668143799839006ed03a92c4e2ab4a3aadcd7c20f717084b5131c88d257c84",
+  "raw_record_count": 900,
+  "treatment_counts": {
+    "FullChain": 450,
+    "EvoSuite": 450
+  },
+  "evosuite_command_count": 450,
+  "evosuite_unique_command_keys": 450,
+  "evosuite_command_keys_match_terminal_keys": true,
+  "evosuite_search_budget_seconds": {
+    "420": 450
+  },
+  "evosuite_exit_codes": {
+    "0": 446,
+    "137": 4
+  },
+  "evosuite_command_timed_out_keys": [
+    [
+      "PT-O-021",
+      42
+    ],
+    [
+      "PT-O-021",
+      43
+    ],
+    [
+      "PT-O-021",
+      44
+    ],
+    [
+      "PT-O-138",
+      43
+    ]
+  ],
+  "evosuite_verification_pass_counts": {
+    "1": 275,
+    "0": 175
+  },
+  "evosuite_recorded_token_sum": 0,
+  "evosuite_recorded_provider_request_sum": 0,
+  "evosuite_terminal_120_second_timeouts": [],
+  "limitations": [
+    "The archive hash is not calculated; size identifies this local input only.",
+    "Current adapter source is explanatory evidence, not a verified historical source revision.",
+    "Missing provider-usage totals cannot be recovered from zero-valued terminal fields.",
+    "The command audit does not establish construct-neutral verification or equal realized budgets."
+  ]
+}

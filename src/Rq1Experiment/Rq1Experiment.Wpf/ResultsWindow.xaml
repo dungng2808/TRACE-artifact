@@ -1,0 +1,143 @@
+<Window x:Class="Rq1Experiment.Wpf.ResultsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RQ1 Results" Width="1450" Height="850" MinWidth="1000" MinHeight="650"
+        Background="{StaticResource PageBrush}">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1.3*" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Background="#172033" CornerRadius="10" Padding="16" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="RQ1 Results" Foreground="White" FontSize="23" FontWeight="Bold" />
+                <TextBlock Text="Read-only view of subject review, run artifacts, and metrics" Foreground="#BCC6DD" />
+            </StackPanel>
+        </Border>
+        <GroupBox Grid.Row="1" Header="Mean by approach — end-to-end metrics (failed runs contribute 0; * automatic source-mapped/operational evidence)"
+                  Margin="0,0,0,8">
+            <DataGrid ItemsSource="{Binding Means}" IsReadOnly="True" AutoGenerateColumns="False"
+                      CanUserAddRows="False" HeadersVisibility="Column" MaxHeight="105">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Approach" Binding="{Binding Approach}" Width="100" />
+                    <DataGridTextColumn Header="Runs" Binding="{Binding RunCount}" Width="60" />
+                    <DataGridTextColumn Header="Compile rate" Binding="{Binding CompilationSuccessRate}" Width="100" />
+                    <DataGridTextColumn Header="Execute rate" Binding="{Binding ExecutionSuccessRate}" Width="100" />
+                    <DataGridTextColumn Header="Mean TargetSat" Binding="{Binding MeanTargetSatisfaction}" Width="115" />
+                    <DataGridTextColumn Header="Mean Branch" Binding="{Binding MeanBranchCoverage}" Width="105" />
+                    <DataGridTextColumn Header="Mean Mutation" Binding="{Binding MeanMutationScore}" Width="110" />
+                    <DataGridTextColumn Header="Mean Plan Fidelity*" Binding="{Binding MeanPlanFidelity}" Width="125" />
+                    <DataGridTextColumn Header="Mean Obligation Coverage" Binding="{Binding MeanObligationCoverage}" Width="155" />
+                    <DataGridTextColumn Header="Mean Scenario Validity*" Binding="{Binding MeanScenarioValidity}" Width="145" />
+                    <DataGridTextColumn Header="Mean Pass Rate" Binding="{Binding MeanPassRate}" Width="110" />
+                    <DataGridTextColumn Header="Mean time" Binding="{Binding MeanTotalTime}" Width="90" />
+                    <DataGridTextColumn Header="Mean total*" Binding="{Binding MeanReportedTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total input" Binding="{Binding TotalInputTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total output" Binding="{Binding TotalOutputTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total tokens" Binding="{Binding TotalReportedTokens}" Width="95" />
+                    <DataGridTextColumn Header="Token samples" Binding="{Binding TokenSampleCount}" Width="100" />
+                    <DataGridTextColumn Header="Tool errors" Binding="{Binding ToolErrorCount}" Width="90" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Conditional mean by approach — paired runs only (subjects where BOTH DIRECT and PLANNED passed; excludes compile/test failures)"
+                  Margin="0,0,0,8">
+            <DataGrid ItemsSource="{Binding ConditionalMeans}" IsReadOnly="True" AutoGenerateColumns="False"
+                      CanUserAddRows="False" HeadersVisibility="Column" MaxHeight="105">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Approach" Binding="{Binding Approach}" Width="100" />
+                    <DataGridTextColumn Header="Passed runs" Binding="{Binding RunCount}" Width="100" />
+                    <DataGridTextColumn Header="Mean TargetSat" Binding="{Binding MeanTargetSatisfaction}" Width="115" />
+                    <DataGridTextColumn Header="Mean Branch" Binding="{Binding MeanBranchCoverage}" Width="105" />
+                    <DataGridTextColumn Header="Mean Mutation" Binding="{Binding MeanMutationScore}" Width="110" />
+                    <DataGridTextColumn Header="Mean Plan Fidelity*" Binding="{Binding MeanPlanFidelity}" Width="125" />
+                    <DataGridTextColumn Header="Mean Obligation Coverage" Binding="{Binding MeanObligationCoverage}" Width="155" />
+                    <DataGridTextColumn Header="Mean Scenario Validity*" Binding="{Binding MeanScenarioValidity}" Width="145" />
+                    <DataGridTextColumn Header="Mean Pass Rate" Binding="{Binding MeanPassRate}" Width="110" />
+                    <DataGridTextColumn Header="Mean time" Binding="{Binding MeanTotalTime}" Width="90" />
+                    <DataGridTextColumn Header="Mean total*" Binding="{Binding MeanReportedTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total input" Binding="{Binding TotalInputTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total output" Binding="{Binding TotalOutputTokens}" Width="95" />
+                    <DataGridTextColumn Header="Total tokens" Binding="{Binding TotalReportedTokens}" Width="95" />
+                    <DataGridTextColumn Header="Token samples" Binding="{Binding TokenSampleCount}" Width="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <DataGrid x:Name="MetricsGrid" Grid.Row="3" ItemsSource="{Binding Metrics}" IsReadOnly="True"
+                  SelectionMode="Extended" SelectionUnit="FullRow"
+                  AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Subject" Binding="{Binding SubjectId}" Width="90" />
+                <DataGridTextColumn Header="Split / Approach" Binding="{Binding Approach}" Width="110" />
+                <DataGridTextColumn Header="Rep" Binding="{Binding Repetition}" Width="45" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
+                <DataGridTextColumn Header="Failure" Binding="{Binding Failure}" Width="145" />
+                <DataGridTextColumn Header="Focal class" Binding="{Binding FocalClass}" Width="170" />
+                <DataGridTextColumn Header="Focal method" Binding="{Binding FocalMethod}" Width="150" />
+                <DataGridTextColumn Header="Compile" Binding="{Binding Compile}" Width="70" />
+                <DataGridTextColumn Header="Execute" Binding="{Binding Execution}" Width="70" />
+                <DataGridTextColumn Header="TargetSat" Binding="{Binding TargetSatisfaction}" Width="80" />
+                <DataGridTextColumn Header="Branch" Binding="{Binding BranchCoverage}" Width="75" />
+                <DataGridTextColumn Header="Mutation" Binding="{Binding MutationScore}" Width="75" />
+                <DataGridTextColumn Header="Plan Fidelity*" Binding="{Binding PlanFidelity}" Width="95" />
+                <DataGridTextColumn Header="Obligation Coverage" Binding="{Binding ObligationCoverage}" Width="125" />
+                <DataGridTextColumn Header="Scenario Validity*" Binding="{Binding ScenarioValidity}" Width="115" />
+                <DataGridTextColumn Header="Pass Rate" Binding="{Binding PassRate}" Width="80" />
+                <DataGridTextColumn Header="Input tokens" Binding="{Binding InputTokens}" Width="85" />
+                <DataGridTextColumn Header="Output tokens" Binding="{Binding OutputTokens}" Width="90" />
+                <DataGridTextColumn Header="Total tokens" Binding="{Binding TotalTokens}" Width="85" />
+                <DataGridTextColumn Header="Total time" Binding="{Binding TotalTime}" Width="85" />
+                <DataGridTemplateColumn Header="Action" Width="350">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Plan" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding HasPlan}" Click="ViewPlan_OnClick" />
+                                <Button Content="Tests" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding HasTests}" Click="ViewTests_OnClick" />
+                                <Button Content="Logs" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding HasLogs}" Click="ViewLogs_OnClick" />
+                                <Button Content="Approve" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding CanReview}" Click="ApproveRow_OnClick" />
+                                <Button Content="Reject" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding CanReview}" Click="RejectRow_OnClick" />
+                                <Button Content="Rerun" Padding="8,3" Margin="2"
+                                        IsEnabled="{Binding CanRerun}" Click="RerunRow_OnClick"
+                                        ToolTip="Reset artifact của run này để chạy lại trên Dashboard" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Run directory" Binding="{Binding RunDirectory}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="4" Height="6" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center" Background="#CBD5E1" />
+        <GroupBox Grid.Row="5" Header="{Binding DetailTitle}" Margin="0,6,0,4">
+            <TextBox Text="{Binding DetailContent, Mode=OneWay}" IsReadOnly="True" AcceptsReturn="True"
+                     FontFamily="Consolas" FontSize="12" TextWrapping="NoWrap"
+                     Background="#0F172A" Foreground="#E2E8F0"
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        </GroupBox>
+        <DockPanel Grid.Row="6" Margin="0,10,0,0">
+            <TextBlock Text="{Binding Summary}" VerticalAlignment="Center" TextWrapping="Wrap" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="Approve selected" Click="ApproveSelected_OnClick" />
+                <Button Content="Reject selected" Click="RejectSelected_OnClick" />
+                <Button Content="Reset selected" Click="ResetSelected_OnClick" ToolTip="Xóa artifact của các run đã chọn để chạy lại" />
+                <Button Content="Reset all failed runs" Click="ResetFailedRuns_OnClick"
+                        Background="#4F46E5" Foreground="White" FontWeight="SemiBold"
+                        ToolTip="Xóa artifact của tất cả các run bị lỗi/quá token để chạy lại với budget token mới" />
+                <Button Content="Refresh results" Command="{Binding RebuildCommand}"
+                        ToolTip="Refresh manually. During a run this reads the latest committed snapshot; after completion it rebuilds the authoritative ledger." />
+                <Button Content="Export runs.csv..." Click="Export_OnClick" />
+                <Button Content="Close" IsCancel="True" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

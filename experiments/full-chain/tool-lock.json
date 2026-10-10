@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "full-chain-tool-lock-v1",
+  "generatedAt": "2026-09-19T01:35:00+07:00",
+  "environment": {
+    "java": {
+      "version": "17.0.20+8",
+      "vendor": "Eclipse Adoptium Temurin",
+      "macos": {
+        "path": "JDK/macos-temurin-17/Contents/Home/bin/java",
+        "sha256": "a0c0cd823f79e87a0df485249c50efee2ab6080fb8fbd04f2a5c1c15c14001cf"
+      },
+      "windows": {
+        "path": "JDK/jdk-17.0.20+8/bin/java.exe",
+        "sha256": "5b463cad4fcd8e4c655cc1c6f45a3b2ebb002adac94ebad2fdaa4f43e2aee211"
+      }
+    },
+    "maven": {
+      "version": "3.9.16",
+      "home": "Maven/apache-maven-3.9.16",
+      "executable": "Maven/apache-maven-3.9.16/bin/mvn",
+      "sha256": "f9381d0cb98abaaf9592dae421eddc497e84ed9bfb723b84c111d1350863c3a2"
+    },
+    "evosuite": {
+      "version": "1.2.0",
+      "jar": {
+        "path": "tools/evosuite/evosuite-1.2.0.jar",
+        "sha256": "0bc0062fdec70c35089ad736c9b88ccf87308c2f0aaaafe43176f3c4a89ddeba"
+      },
+      "runtimeJar": {
+        "path": "tools/evosuite/evosuite-standalone-runtime-1.2.0.jar",
+        "sha256": "cc856a6d02b391367d2a4516346c699c67e4b4a370203471df1f3d78b46b74dc"
+      }
+    },
+    "jacoco": {
+      "groupId": "org.jacoco",
+      "artifactId": "jacoco-maven-plugin",
+      "version": "0.8.15",
+      "jarSha256": "f1b5a734742f99573f99c0af214f63c28156ef47f7467e434a7a1b723cdba9b2"
+    },
+    "pit": {
+      "groupId": "org.pitest",
+      "artifactId": "pitest-maven",
+      "version": "1.25.3",
+      "junit5Plugin": "1.2.3",
+      "jarSha256": "f006872896a282a66730acabddf5510a3deb41b479bd0f82a6838640bb24f66a"
+    }
+  }
+}
+

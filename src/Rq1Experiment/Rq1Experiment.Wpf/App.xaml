@@ -1,0 +1,22 @@
+<Application x:Class="Rq1Experiment.Wpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#4F46E5" />
+        <SolidColorBrush x:Key="PanelBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="PageBrush" Color="#F4F6FA" />
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,7" />
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="7,5" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="7,5" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+    </Application.Resources>
+</Application>

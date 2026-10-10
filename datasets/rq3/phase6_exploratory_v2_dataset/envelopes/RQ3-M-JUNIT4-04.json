@@ -1,0 +1,144 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-JUNIT4-04",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-JUNIT4-04",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "GH-junit4",
+                                           "project":  "junit4",
+                                           "repository_url":  "https://github.com/junit-team/junit4.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "890f3c972647de378f25e7271d8fbbd9d3456b79",
+                                         "resolved_revision":  "890f3c972647de378f25e7271d8fbbd9d3456b79"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "junit.tests.extensions.RepeatedTestTest#testRepeatedOnce",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/base_test_sources/M-JUNIT4-base-test.java",
+                                          "artifact_sha256":  "0cc580e96c7481e84131870495c64deab5364591c8710604bdd3d2c141a80263"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "junit.extensions.RepeatedTest",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "Declared plan: Verify that RepeatedTest repeats a TestSuite a given number of times, checking countTestCases and runCount for repeat counts 1, 3, 0, and negative (expecting IllegalArgumentException for -1). The generated test must exercise the declared focal behavior rather than a different input path or behavior.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for junit.tests.extensions.RepeatedTestTest#testRepeatedOnce.",
+                                         "expected_observation":  "The generated test must demonstrate the behavior declared above at the stated focal target; assertions about a different behavior do not satisfy the plan.",
+                                         "structural_target":  "junit.extensions.RepeatedTest"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "junit.tests.extensions.RepeatedTestTest#testRepeatedOnce",
+                           "source_text":  "package junit.tests.extensions;\n\nimport junit.extensions.RepeatedTest;\nimport junit.framework.Test;\nimport junit.framework.TestCase;\nimport junit.framework.TestResult;\nimport junit.framework.TestSuite;\n\n/**\n * Testing the RepeatedTest support.\n */\npublic class RepeatedTestTest extends TestCase {\n    private TestSuite fSuite;\n\n    public static class SuccessTest extends TestCase {\n\n        @Override\n        public void runTest() {\n        }\n    }\n\n    public RepeatedTestTest(String name) {\n        super(name);\n        fSuite = new TestSuite();\n        fSuite.addTest(new SuccessTest());\n        fSuite.addTest(new SuccessTest());\n    }\n\n    public void testRepeatedOnce() {\n        Test test = new RepeatedTest(fSuite, 1);\n        assertEquals(2, test.countTestCases());\n        TestResult result = new TestResult();\n        test.run(result);\n        assertEquals(2, result.runCount());\n    }\n\n    public void testRepeatedMoreThanOnce() {\n        Test test = new RepeatedTest(fSuite, 3);\n        assertEquals(6, test.countTestCases());\n        TestResult result = new TestResult();\n        test.run(result);\n        assertEquals(6, result.runCount());\n    }\n\n    public void testRepeatedZero() {\n        Test test = new RepeatedTest(fSuite, 0);\n        assertEquals(0, test.countTestCases());\n        TestResult result = new TestResult();\n        test.run(result);\n        assertEquals(0, result.runCount());\n    }\n\n    public void testRepeatedNegative() {\n        try {\n            new RepeatedTest(fSuite, -1);\n        } catch (IllegalArgumentException e) {\n            assertTrue(e.getMessage().contains(\"\u003e=\"));\n            return;\n        }\n        fail(\"Should throw an IllegalArgumentException\");\n    }\n}",
+                           "source_sha256":  "0CC580E96C7481E84131870495C64DEAB5364591C8710604BDD3D2C141A80263",
+                           "materialized_from":  "source_artifact/RQ3-M-JUNIT4-04.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-JUNIT4-04",
+                          "repository":  {
+                                             "project":  "junit4",
+                                             "revision":  "890f3c972647de378f25e7271d8fbbd9d3456b79",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase1\\candidates\\junit4",
+                                             "toolchain":  "MAVEN"
+                                         },
+                          "test_id":  "junit.tests.extensions.RepeatedTestTest#testRepeatedOnce",
+                          "focal_class":  "junit.extensions.RepeatedTest",
+                          "collected_at":  "2026-08-17T10:22:14.040993+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  146785,
+                                                "toolchain":  "MAVEN",
+                                                "runner":  "docker",
+                                                "container_image":  "maven:3.9.11-eclipse-temurin-17",
+                                                "java_home":  null,
+                                                "stdout_sha256":  "D62D5469F662C3391D4FA18692A8ADE7FDA8C8170B04E6CD42E3883BB4549F82",
+                                                "stderr_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  236113,
+                                                "toolchain":  "MAVEN",
+                                                "runner":  "docker",
+                                                "container_image":  "maven:3.9.11-eclipse-temurin-17",
+                                                "java_home":  null,
+                                                "stdout_sha256":  "A3BA43C3078780E77B3E872DE4A4075B6D196BFC67D0BCCD16CFE41B5B4BC8A2",
+                                                "stderr_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "PASS",
+                                                "exit_code":  0,
+                                                "duration_ms":  235813,
+                                                "toolchain":  "MAVEN",
+                                                "runner":  "docker",
+                                                "container_image":  "maven:3.9.11-eclipse-temurin-17",
+                                                "java_home":  null,
+                                                "stdout_sha256":  "B59E05C81CC92CC30AF00E72C1F0A4B16AE5117E0AD46C20379A449AE4D31701",
+                                                "stderr_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  33949,
+                                                "toolchain":  "MAVEN",
+                                                "runner":  "docker",
+                                                "container_image":  "maven:3.9.11-eclipse-temurin-17",
+                                                "java_home":  null,
+                                                "stdout_sha256":  "5A37C735C98261F1B77075AD0E7441CEB4D4DE08945A9B5CE55A115EF6CCC5BE",
+                                                "stderr_sha256":  "B3F4A383D48E925700A8C5024941DE6179FA7B8411C761B9EEB221ADC74448EA",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "TOOL_FAILED",
+                                           "note":  "Per-test JaCoCo XML is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "TOOL_FAILED",
+                                           "note":  "Targeted PIT XML is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  "10:22:03 AM PIT \u003e\u003e INFO : Verbose logging is disabled. If you encounter a problem, please enable it before reporting an issue.\n10:22:12 AM PIT \u003e\u003e INFO : Created 1 mutation test units in pre scan\n10:22:13 AM PIT \u003e\u003e INFO : Sending 1 test classes to minion\n10:22:13 AM PIT \u003e\u003e INFO : Sent tests to minion\n10:22:13 AM PIT \u003e\u003e SEVERE : Coverage generator Minion exited abnormally due to UNKNOWN_ERROR\n"
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}

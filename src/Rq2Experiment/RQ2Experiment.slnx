@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="RQ2Experiment.Core/RQ2Experiment.Core.csproj" />
+    <Project Path="RQ2Experiment.Infrastructure/RQ2Experiment.Infrastructure.csproj" />
+    <Project Path="RQ2Experiment.Runner/RQ2Experiment.Runner.csproj" />
+    <Project Path="RQ2Experiment.Wpf/RQ2Experiment.Wpf.csproj" />
+  </Folder>
+</Solution>

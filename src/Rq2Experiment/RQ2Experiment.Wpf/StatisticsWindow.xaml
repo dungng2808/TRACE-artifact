@@ -1,0 +1,337 @@
+<Window x:Class="RQ2Experiment.Wpf.StatisticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Thống kê thực nghiệm RQ2"
+        Width="1280"
+        Height="760"
+        MinWidth="1000"
+        MinHeight="620"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource SurfaceBrush}">
+    <Window.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#DCE3ED" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#174EA6" Padding="20,14">
+            <DockPanel>
+                <TextBlock Text="Dashboard thống kê RQ2"
+                           Foreground="White" FontSize="21" FontWeight="Bold" />
+                <TextBlock Text="{Binding StatisticsBatchLabel}"
+                           Foreground="#DCE8FA" HorizontalAlignment="Right"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
+        <ScrollViewer x:Name="StatisticsScrollViewer"
+                      Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="18">
+                <UniformGrid Columns="4" Margin="0,0,0,12">
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Tổng số run" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsTotalRuns}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Đơn vị lỗi độc lập" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsIndependentUnitDisplay}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Project clusters" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsProjectClusterDisplay}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Raw success rate" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsSuccessRate, StringFormat={}{0:P1}}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Analysis success rate" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsAnalysisSuccessRate, StringFormat={}{0:P1}}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Lỗi hạ tầng/API" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsInfrastructureFailures}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Tổng token" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsTotalTokens, StringFormat={}{0:N0}}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Token accounting" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsTokenAccountingCompletionDisplay}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Measurement complete" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsMeasurementCompletionDisplay}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Regression" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsTotalRegressions}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Mutation (success)" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsAverageMutationScoreDisplay}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource CardStyle}" Margin="0,8,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Iteration/run" Foreground="#6B7280" />
+                            <TextBlock Text="{Binding StatisticsAverageIterations, StringFormat={}{0:N2}}" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <Border Background="#FFF8E1" BorderBrush="#F1DEA0" BorderThickness="1"
+                        CornerRadius="5" Padding="9" Margin="0,0,0,12">
+                    <TextBlock Text="{Binding StatisticsCaveat}" TextWrapping="Wrap" Foreground="#6B5B20" />
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatisticsAnalysisStatus}"
+                                   FontSize="17" FontWeight="Bold" Foreground="#174EA6" />
+                        <TextBlock Text="{Binding StatisticsOverallConclusion}"
+                                   Margin="0,6,0,0" TextWrapping="Wrap" FontSize="14" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14"
+                        BorderBrush="#F1B84B" BorderThickness="2">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatisticsClaimStatus}"
+                                   FontSize="17" FontWeight="Bold" Foreground="#9A6700" />
+                        <TextBlock Text="{Binding StatisticsClaimDetail}"
+                                   Margin="0,6,0,0" TextWrapping="Wrap" FontSize="13" />
+                        <TextBlock Text="{Binding StatisticsPowerProjection}"
+                                   Margin="0,6,0,0" TextWrapping="Wrap" FontSize="13"
+                                   Foreground="#5F6368" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="Final-stage failure funnel theo treatment"
+                           FontSize="16" FontWeight="Bold" Foreground="#174EA6"
+                           Margin="0,0,0,8" />
+                <DataGrid ItemsSource="{Binding StageFunnelStatistics}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Focusable="False" IsTabStop="False"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal" Height="120"
+                          Margin="0,0,0,16">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Treatment" Binding="{Binding Strategy}" Width="*" />
+                        <DataGridTextColumn Header="Runs" Binding="{Binding Runs}" Width="55" />
+                        <DataGridTextColumn Header="LLM output" Binding="{Binding LlmDisplay}" Width="80" />
+                        <DataGridTextColumn Header="Apply source" Binding="{Binding SourceDisplay}" Width="85" />
+                        <DataGridTextColumn Header="Compile" Binding="{Binding CompilationDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Focal pass" Binding="{Binding FocalDisplay}" Width="80" />
+                        <DataGridTextColumn Header="Bug oracle clear" Binding="{Binding BuggyOracleDisplay}" Width="95" />
+                        <DataGridTextColumn Header="Regression-free" Binding="{Binding RegressionDisplay}" Width="100" />
+                        <DataGridTextColumn Header="Coverage" Binding="{Binding CoverageDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Mutation" Binding="{Binding MutationDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Legacy inferred" Binding="{Binding InferredRuns}" Width="90" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <TextBlock Text="So sánh ghép cặp theo đơn vị lỗi, cluster theo project"
+                           FontSize="16" FontWeight="Bold" Foreground="#174EA6"
+                           Margin="0,0,0,8" />
+                <DataGrid ItemsSource="{Binding PairwiseComparisons}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Focusable="False" IsTabStop="False"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal" Height="135"
+                          HorizontalScrollBarVisibility="Auto"
+                          Margin="0,0,0,16">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Comparison" Binding="{Binding Comparison}" Width="120" />
+                        <DataGridTextColumn Header="Paired units" Binding="{Binding PairedTasks}" Width="82" />
+                        <DataGridTextColumn Header="Projects" Binding="{Binding ProjectClusters}" Width="65" />
+                        <DataGridTextColumn Header="TGSLR rate" Binding="{Binding TgslrTaskMeanSuccessRate, StringFormat={}{0:P1}}" Width="85" />
+                        <DataGridTextColumn Header="Baseline rate" Binding="{Binding BaselineTaskMeanSuccessRate, StringFormat={}{0:P1}}" Width="90" />
+                        <DataGridTextColumn Header="Delta" Binding="{Binding SuccessRateDeltaDisplay}" Width="70" />
+                        <DataGridTextColumn Header="Cluster 95% CI" Binding="{Binding ClusterBootstrapIntervalDisplay}" Width="125" />
+                        <DataGridTextColumn Header="Win/Tie/Loss" Binding="{Binding TaskWinTieLossDisplay}" Width="80" />
+                        <DataGridTextColumn Header="Raw p" Binding="{Binding ExactSignTestPValueDisplay}" Width="65" />
+                        <DataGridTextColumn Header="Holm p" Binding="{Binding HolmAdjustedPValueDisplay}" Width="65" />
+                        <DataGridTextColumn Header="Δ token" Binding="{Binding MeanTokenDeltaDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Kết luận" Binding="{Binding Conclusion}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <TextBlock Text="Outcome effects đã định trước (TGSLR − baseline)"
+                           FontSize="16" FontWeight="Bold" Foreground="#174EA6"
+                           Margin="0,0,0,8" />
+                <DataGrid ItemsSource="{Binding OutcomeEffects}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Focusable="False" IsTabStop="False"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal" Height="285"
+                          HorizontalScrollBarVisibility="Auto"
+                          Margin="0,0,0,16">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Comparison" Binding="{Binding Comparison}" Width="120" />
+                        <DataGridTextColumn Header="Outcome" Binding="{Binding Outcome}" Width="115" />
+                        <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="72" />
+                        <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="68" />
+                        <DataGridTextColumn Header="Paired units" Binding="{Binding PairedUnits}" Width="78" />
+                        <DataGridTextColumn Header="Projects" Binding="{Binding ProjectClusters}" Width="62" />
+                        <DataGridTextColumn Header="TGSLR" Binding="{Binding TgslrMeanDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Baseline" Binding="{Binding BaselineMeanDisplay}" Width="75" />
+                        <DataGridTextColumn Header="Delta" Binding="{Binding MeanDeltaDisplay}" Width="70" />
+                        <DataGridTextColumn Header="Cluster 95% CI" Binding="{Binding ClusterIntervalDisplay}" Width="120" />
+                        <DataGridTextColumn Header="NI margin" Binding="{Binding MarginDisplay}" Width="70" />
+                        <DataGridTextColumn Header="Decision" Binding="{Binding Decision}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <TextBlock Text="Bảng so sánh theo treatment"
+                           FontSize="16" FontWeight="Bold" Foreground="#174EA6"
+                           Margin="0,0,0,8" />
+                <DataGrid ItemsSource="{Binding TreatmentStatistics}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Focusable="False" IsTabStop="False"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal" Height="220"
+                          HorizontalScrollBarVisibility="Auto"
+                          Margin="0,0,0,16">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Treatment" Binding="{Binding Strategy}" Width="*" />
+                        <DataGridTextColumn Header="Runs" Binding="{Binding Runs}" Width="60" />
+                        <DataGridTextColumn Header="Eligible" Binding="{Binding AnalysisEligibleRuns}" Width="65" />
+                        <DataGridTextColumn Header="Success" Binding="{Binding Successes}" Width="70" />
+                        <DataGridTextColumn Header="Raw rate" Binding="{Binding SuccessRate, StringFormat={}{0:P1}}" Width="75" />
+                        <DataGridTextColumn Header="Analysis rate" Binding="{Binding AnalysisSuccessRate, StringFormat={}{0:P1}}" Width="90" />
+                        <DataGridTextColumn Header="Infra" Binding="{Binding InfrastructureFailures}" Width="55" />
+                        <DataGridTextColumn Header="Retries" Binding="{Binding TotalApiRetries}" Width="60" />
+                        <DataGridTextColumn Header="Failovers" Binding="{Binding TotalKeyFailovers}" Width="65" />
+                        <DataGridTextColumn Header="Avg tokens" Binding="{Binding AverageTokens, StringFormat={}{0:N0}}" Width="85" />
+                        <DataGridTextColumn Header="Avg API calls" Binding="{Binding AverageApiCalls, StringFormat={}{0:N2}}" Width="90" />
+                        <DataGridTextColumn Header="Avg iterations" Binding="{Binding AverageIterations, StringFormat={}{0:N2}}" Width="95" />
+                        <DataGridTextColumn Header="Final LOC" Binding="{Binding AverageChangedLines, StringFormat={}{0:N1}}" Width="75" />
+                        <DataGridTextColumn Header="Regressions" Binding="{Binding TotalRegressions}" Width="85" />
+                        <DataGridTextColumn Header="Measured" Binding="{Binding MeasurementsComplete}" Width="75" />
+                        <DataGridTextColumn Header="Cov measured" Binding="{Binding CoverageMeasurementsComplete}" Width="90" />
+                        <DataGridTextColumn Header="Mut measured" Binding="{Binding MutationMeasurementsComplete}" Width="90" />
+                        <DataGridTextColumn Header="Token accounted" Binding="{Binding TokenAccountedRuns}" Width="105" />
+                        <DataGridTextColumn Header="Prompt audited" Binding="{Binding PromptAuditedRuns}" Width="95" />
+                        <DataGridTextColumn Header="Coverage" Binding="{Binding AverageLineCoverageDisplay}" Width="80" />
+                        <DataGridTextColumn Header="Mutation" Binding="{Binding AverageMutationScoreDisplay}" Width="80" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Token trung bình mỗi run"
+                                       FontWeight="Bold" Foreground="#174EA6" Margin="0,0,0,7" />
+                            <ItemsControl ItemsSource="{Binding TreatmentStatistics}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="70" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Strategy}" VerticalAlignment="Center" />
+                                            <ProgressBar Grid.Column="1" Maximum="100"
+                                                         Value="{Binding TokenBarPercent, Mode=OneWay}"
+                                                         Height="18" Margin="6,0" />
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding AverageTokens, StringFormat={}{0:N0}}"
+                                                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Analysis success rate và mutation score"
+                                       FontWeight="Bold" Foreground="#174EA6" Margin="0,0,0,7" />
+                            <ItemsControl ItemsSource="{Binding TreatmentStatistics}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="55" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="55" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Strategy}" VerticalAlignment="Center" />
+                                            <ProgressBar Grid.Column="1" Maximum="100"
+                                                         Value="{Binding AnalysisSuccessRatePercent, Mode=OneWay}"
+                                                         Height="18" Foreground="#174EA6" Margin="6,0" />
+                                            <TextBlock Grid.Column="2" Text="{Binding AnalysisSuccessRate, StringFormat={}{0:P0}}"
+                                                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                            <ProgressBar Grid.Column="3" Maximum="100"
+                                                         Value="{Binding MutationScorePercent, Mode=OneWay}"
+                                                         Height="18" Foreground="#2E7D32" Margin="8,0,6,0" />
+                                            <TextBlock Grid.Column="4" Text="{Binding MutationScoreDisplay}"
+                                                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#DADCE0"
+                BorderThickness="0,1,0,0" Padding="18,10">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Content="Nạp lại kết quả" Command="{Binding LoadResultsCommand}" />
+                    <Button x:Name="CloseButton" Content="Đóng" Click="Close_OnClick"
+                            Background="{StaticResource PrimaryBrush}" Foreground="White" />
+                </StackPanel>
+                <TextBlock Text="{Binding RunSummary}" VerticalAlignment="Center"
+                           Foreground="#174EA6" FontWeight="SemiBold" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

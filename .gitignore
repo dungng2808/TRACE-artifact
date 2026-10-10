@@ -1,0 +1,30 @@
+# Generated build and cache files
+**/bin/
+**/obj/
+**/target/
+**/.vs/
+**/__pycache__/
+**/.pytest_cache/
+**/.venv/
+**/node_modules/
+*.aux
+*.log
+*.out
+*.blg
+*.synctex.gz
+
+# Credentials and machine-local settings
+.env
+.env.*
+!.env.example
+**/api-keys/
+**/api-key-state.json
+**/local-key.txt
+**/*.local.json
+
+# Large raw archives are deposited separately after review
+*.zip
+*.tar
+*.tar.gz
+
+.DS_Store

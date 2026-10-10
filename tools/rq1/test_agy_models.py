@@ -1,0 +1,10 @@
+import subprocess
+p = subprocess.run(["agy", "-p", "hello", "--model", "gemini-3.7-flash", "--effort", "high"], capture_output=True, text=True)
+print("3.7-flash Return code:", p.returncode)
+print("STDERR:", p.stderr)
+p2 = subprocess.run(["agy", "-p", "hello", "--model", "gemini-3.1-pro", "--effort", "high"], capture_output=True, text=True)
+print("3.1-pro Return code:", p2.returncode)
+print("STDERR:", p2.stderr)
+p3 = subprocess.run(["agy", "-p", "hello", "--model", "gemini-3.1-pro", "--effort", "low"], capture_output=True, text=True)
+print("3.1-pro (low) Return code:", p3.returncode)
+print("STDERR:", p3.stderr)

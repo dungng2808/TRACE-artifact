@@ -1,0 +1,21 @@
+{
+  "contractVersion": "RQ2-READY-MANIFEST-1",
+  "candidateManifest": "D:\\Ky9\\Experiment\\dataset\\rq2-d4j-120-candidate\\benchmark.structural-ready.json",
+  "candidateManifestSha256": "10EDA92A0B68F1FA6BC8C886D8E3E0DC8835DDA2E7C60BDC3C87585160FC3482",
+  "readinessCsv": "D:\\Ky9\\Experiment\\dataset\\rq2-d4j-120-candidate\\preflight-logs\\20260819-073943\\task-readiness.csv",
+  "readinessCsvSha256": "80FED0FE17FA7C720B1EC86CFDB93B633BB06C2FA2A9D563296DD876321779A7",
+  "readyManifest": "D:\\Ky9\\Experiment\\dataset\\rq2-d4j-120-candidate\\benchmark.ready-100.json",
+  "readyManifestSha256": "2D62E3DFFF150DAF3CC55EF7676EA6A98477F1A221D7A6F440869D96CD213717",
+  "readyTasks": 100,
+  "independentUnits": 100,
+  "projects": 6,
+  "projectIds": [
+    "Compress",
+    "Gson",
+    "JacksonCore",
+    "JacksonDatabind",
+    "JacksonXml",
+    "Jsoup"
+  ],
+  "selectionSeed": 20260814
+}

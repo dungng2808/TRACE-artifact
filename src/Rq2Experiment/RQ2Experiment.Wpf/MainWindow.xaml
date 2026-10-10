@@ -1,0 +1,665 @@
+<Window x:Class="RQ2Experiment.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RQ2 Experiment Workbench"
+        Width="1480"
+        Height="920"
+        MinWidth="1180"
+        MinHeight="760"
+        Background="{StaticResource SurfaceBrush}">
+    <Window.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#DCE3ED" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="14" />
+        </Style>
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#174EA6" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#30343B" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="18,14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="12" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="14" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" Margin="2,0,2,10">
+                <TextBlock Text="Cấu hình thực nghiệm"
+                           DockPanel.Dock="Left"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="#202124" />
+                <TextBlock Text="Nhập theo thứ tự từ trái sang phải, từ trên xuống dưới"
+                           DockPanel.Dock="Right"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Foreground="#6B7280" />
+            </DockPanel>
+
+            <!-- Hàng 1: LLM -> Dữ liệu -> Ngân sách -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.45*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="1.1*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="0.75*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="1. Nhà cung cấp và model LLM"
+                                   Style="{StaticResource SectionTitleStyle}" />
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Nhà cung cấp" Style="{StaticResource FieldLabelStyle}" />
+                                <ComboBox ItemsSource="{Binding Providers}"
+                                          SelectedItem="{Binding SelectedProvider}"
+                                          DisplayMemberPath="DisplayName"
+                                          Padding="7,5" Margin="0,4,0,8" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Model ID" Style="{StaticResource FieldLabelStyle}" />
+                                <ComboBox ItemsSource="{Binding AvailableModels}"
+                                          Text="{Binding ModelName, UpdateSourceTrigger=PropertyChanged}"
+                                          IsEditable="True"
+                                          Padding="7,5" Margin="0,4,0,8" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="API base URL" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox Text="{Binding ApiBaseUrl, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0,4,0,8" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Giao thức" Style="{StaticResource FieldLabelStyle}" />
+                                <ComboBox ItemsSource="{Binding ApiProtocols}"
+                                          SelectedItem="{Binding ApiProtocol}"
+                                          Padding="7,5" Margin="0,4,0,8" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Reasoning" Style="{StaticResource FieldLabelStyle}" />
+                                <ComboBox ItemsSource="{Binding ReasoningEfforts}"
+                                          SelectedItem="{Binding ReasoningEffort}"
+                                          IsEnabled="{Binding IsResponsesProtocol}"
+                                          Padding="7,5" Margin="0,4,0,8" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Dán danh sách API key (mỗi dòng một key)"
+                                           Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="ApiKeysInputTextBox"
+                                         AcceptsReturn="True"
+                                         TextWrapping="NoWrap"
+                                         VerticalScrollBarVisibility="Auto"
+                                         MinHeight="58"
+                                         MaxHeight="80"
+                                         Padding="8,6" Margin="0,4,0,8" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom"
+                                        Margin="0,0,0,8">
+                                <Button Content="Thêm danh sách"
+                                        Click="AddApiKeys_OnClick"
+                                        Margin="0,0,10,0" />
+                                <CheckBox Content="JSON mode"
+                                          IsChecked="{Binding UseJsonMode}"
+                                          VerticalAlignment="Center"
+                                          ToolTip="Tắt nếu model/provider không hỗ trợ response_format." />
+                                <Button Content="Tải model"
+                                        Command="{Binding LoadModelsCommand}"
+                                        Margin="10,0,0,0" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="4" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ListBox Grid.Column="0"
+                                     ItemsSource="{Binding ApiKeys}"
+                                     SelectedItem="{Binding SelectedApiKey}"
+                                     DisplayMemberPath="DisplayText"
+                                     MinHeight="54"
+                                     MaxHeight="76"
+                                     Padding="4" />
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <Button Content="Xóa key chọn"
+                                        Click="RemoveApiKey_OnClick"
+                                        Margin="0,0,0,6" />
+                                <Button Content="Xóa tất cả"
+                                        Click="ClearApiKeys_OnClick"
+                                        Margin="0" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Grid.Row="5"
+                                   Text="Tất cả key phải cùng nhà cung cấp. Key đang chọn dùng để tải model; khi chạy, toàn bộ danh sách tạo thành pool sticky round-robin."
+                                   Foreground="#6B7280"
+                                   FontSize="11"
+                                   TextWrapping="Wrap"
+                                   Margin="4,0,4,7" />
+
+                        <Border Grid.Row="6" Background="#F3F6FA"
+                                BorderBrush="#E1E6ED" BorderThickness="1"
+                                CornerRadius="5" Padding="8">
+                            <TextBlock Text="{Binding ApiConnectionStatus}"
+                                       TextWrapping="Wrap"
+                                       Foreground="#5F6368"
+                                       FontSize="12" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="2. Dữ liệu đầu vào và đầu ra"
+                                   Style="{StaticResource SectionTitleStyle}" />
+
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="Benchmark manifest (.json)" Style="{StaticResource FieldLabelStyle}" />
+                            <Grid Margin="0,4,0,9">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding BenchmarkManifestPath, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0" />
+                                <Button Grid.Column="1" Content="Chọn..."
+                                        Click="BrowseManifest_OnClick" Margin="8,0,0,0" />
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="Repository override (tùy chọn)" Style="{StaticResource FieldLabelStyle}" />
+                            <Grid Margin="0,4,0,9">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding RepositoryPath, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0" />
+                                <Button Grid.Column="1" Content="Chọn..."
+                                        Click="BrowseRepository_OnClick" Margin="8,0,0,0" />
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3">
+                            <TextBlock Text="Thư mục kết quả" Style="{StaticResource FieldLabelStyle}" />
+                            <Grid Margin="0,4,0,9">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding OutputDirectory, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0" />
+                                <Button Grid.Column="1" Content="Chọn..."
+                                        Click="BrowseOutput_OnClick" Margin="8,0,0,0" />
+                            </Grid>
+                        </StackPanel>
+
+                        <Border Grid.Row="4" Background="#FFF8E1"
+                                BorderBrush="#F1DEA0" BorderThickness="1"
+                                CornerRadius="5" Padding="9"
+                                VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding DatasetReadinessStatus}"
+                                       TextWrapping="Wrap" Foreground="#6B5B20" FontSize="12" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="4" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="3. Ngân sách thực nghiệm"
+                                   Style="{StaticResource SectionTitleStyle}" />
+
+                        <TextBlock Text="Vòng lặp tối đa" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding MaxIterations, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,12" />
+
+                        <TextBlock Text="Số lần lặp" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding Repetitions, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,12" />
+
+                        <TextBlock Text="Số task chạy song song (1–4)" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding MaxParallelRuns, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,4" />
+                        <TextBlock Text="Khuyến nghị 2. Mỗi task dùng workspace riêng; không đặt cao hơn 2 nếu máy thiếu CPU/RAM."
+                                   TextWrapping="Wrap" Foreground="#5F6368" FontSize="11"
+                                   Margin="0,0,0,12" />
+
+                        <TextBlock Text="Giãn cách giữa các request LLM (giây)" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding MinimumLlmRequestIntervalSeconds, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,4" />
+                        <TextBlock Text="Khuyến nghị 5 giây khi các key dùng chung Google project. Nhiều key không tự tạo thêm quota."
+                                   TextWrapping="Wrap" Foreground="#5F6368" FontSize="11"
+                                   Margin="0,0,0,12" />
+
+                        <TextBlock Text="Token budget" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding TokenBudget, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,12" />
+
+                        <TextBlock Text="Seed lịch chạy" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding ScheduleSeed, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,12" />
+
+                        <TextBlock Text="Batch ID (để trống = tạo batch mới)" Style="{StaticResource FieldLabelStyle}" />
+                        <TextBox Text="{Binding BatchId, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4,0,8"
+                                 ToolTip="Giữ nguyên Batch ID để tiếp tục đúng batch sau khi bị gián đoạn." />
+                        <CheckBox Content="Tiếp tục batch: bỏ qua các slot đã có kết quả"
+                                  IsChecked="{Binding ResumeExistingBatch}"
+                                  Margin="0,0,0,4" />
+                        <CheckBox Content="Chỉ retry các lỗi hạ tầng/API"
+                                  IsChecked="{Binding RetryInfrastructureFailures}"
+                                  Margin="0,0,0,12"
+                                  ToolTip="Không chạy lại repair failure, regression hoặc budget-exhausted vì đó là quan sát thực nghiệm." />
+                        <CheckBox Content="Batch confirmatory (chặn nếu protocol/cỡ mẫu chưa freeze)"
+                                  IsChecked="{Binding IsConfirmatoryBatch}"
+                                  Margin="0,0,0,12"
+                                  ToolTip="Không dùng cho pilot. Batch confirmatory yêu cầu outcome plan và power/sampling plan không provisional." />
+
+                        <Border Background="#FFF8E1" BorderBrush="#F1DEA0" BorderThickness="1"
+                                CornerRadius="5" Padding="8" Margin="0,0,0,8">
+                            <TextBlock Text="{Binding BatchEstimate}" TextWrapping="Wrap"
+                                       Foreground="#6B5B20" FontSize="11" />
+                        </Border>
+
+                        <Border Background="#F3F6FA" BorderBrush="#E1E6ED"
+                                BorderThickness="1" CornerRadius="5" Padding="9"
+                                Margin="0,4,0,0">
+                            <TextBlock Text="Checkpoint ghi sau từng run vào runs.jsonl. Giữ Batch ID, manifest, model và seed để resume đúng cấu hình."
+                                       TextWrapping="Wrap" Foreground="#5F6368" FontSize="12" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Hàng 2: Treatment chạy toàn chiều ngang -->
+            <Grid Grid.Row="3">
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="4. Treatment so sánh trong RQ2"
+                                   Style="{StaticResource SectionTitleStyle}" />
+                        <UniformGrid Columns="3" Margin="0,0,0,8">
+                            <CheckBox IsChecked="{Binding IsTgslrSelected}" Margin="0,2,8,2">
+                                <TextBlock Text="TGSLR&#x0a;scenario + traceability"
+                                           TextWrapping="Wrap" FontWeight="SemiBold" />
+                            </CheckBox>
+                            <CheckBox IsChecked="{Binding IsFtmrSelected}" Margin="0,2,8,2">
+                                <TextBlock Text="FTMR&#x0a;không có scenario context"
+                                           TextWrapping="Wrap" FontWeight="SemiBold" />
+                            </CheckBox>
+                            <CheckBox IsChecked="{Binding IsFcrSelected}" Margin="0,2,0,2">
+                                <TextBlock Text="FCR&#x0a;sinh lại toàn bộ test class"
+                                           TextWrapping="Wrap" FontWeight="SemiBold" />
+                            </CheckBox>
+                        </UniformGrid>
+                        <Border Background="#E8F0FE" CornerRadius="5" Padding="8">
+                            <TextBlock TextWrapping="Wrap"
+                                       Foreground="#174EA6"
+                                       FontSize="12"
+                                       Text="{Binding ConfigurationHint}" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Hàng 3: Kết quả rộng bên trái -> Nhật ký bên phải -->
+            <Grid Grid.Row="5" MinHeight="300">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.2*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <DockPanel Margin="0,0,0,9">
+                            <StackPanel DockPanel.Dock="Left">
+                                <TextBlock Text="5. Kết quả các lượt chạy"
+                                           FontSize="16" FontWeight="Bold" Foreground="#174EA6" />
+                                <TextBlock Text="Trạng thái, token, thay đổi mã và regression"
+                                           Foreground="#6B7280" FontSize="12" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <Border DockPanel.Dock="Right" Background="#E8F0FE"
+                                    CornerRadius="12" Padding="10,5"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding RunSummary}"
+                                           Foreground="#174EA6" FontWeight="SemiBold" />
+                            </Border>
+                        </DockPanel>
+                        <DataGrid Grid.Row="1"
+                                  ItemsSource="{Binding Runs}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  AlternatingRowBackground="#F8FAFD">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Task" Binding="{Binding TaskId}" Width="75" />
+                                <DataGridTextColumn Header="Scenario" Binding="{Binding ScenarioId}" Width="70" />
+                                <DataGridTextColumn Header="Strategy" Binding="{Binding Strategy}" Width="75" />
+                                <DataGridTextColumn Header="Rep" Binding="{Binding Repetition}" Width="45" />
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="105" />
+                                <DataGridTextColumn Header="Iter" Binding="{Binding Iteration}" Width="45" />
+                                <DataGridTextColumn Header="Tokens" Binding="{Binding TotalTokens}" Width="65" />
+                                <DataGridTextColumn Header="LOC" Binding="{Binding ChangedLines}" Width="55" />
+                                <DataGridTextColumn Header="Regressions" Binding="{Binding RegressedTests}" Width="85" />
+                                <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="0,0,0,9">
+                            <TextBlock Text="6. Nhật ký hoạt động"
+                                       FontSize="16" FontWeight="Bold" Foreground="#174EA6" />
+                            <TextBlock Text="Tiến trình và lỗi từ LLM/Java tools"
+                                       Foreground="#6B7280" FontSize="12" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <TextBox Grid.Row="1"
+                                 Text="{Binding LogText, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 AcceptsReturn="True"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 TextWrapping="NoWrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto" />
+                    </Grid>
+                </Border>
+                </Grid>
+
+                <TabItem Header="6. Thống kê RQ2" Visibility="Collapsed">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="12">
+                            <UniformGrid Columns="4" Margin="0,0,0,12">
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Tổng số run" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsTotalRuns}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Raw success rate" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsSuccessRate, StringFormat={}{0:P1}}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Analysis success rate" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsAnalysisSuccessRate, StringFormat={}{0:P1}}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Lỗi hạ tầng/API" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsInfrastructureFailures}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Tổng token" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsTotalTokens, StringFormat={}{0:N0}}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Token accounting" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsTokenAccountingCompletionDisplay}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Measurement complete" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsMeasurementCompletionDisplay}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Regression" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsTotalRegressions}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,8,8,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Mutation (success)" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsAverageMutationScoreDisplay}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,8,0,0" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="Iteration/run" Foreground="#6B7280" />
+                                        <TextBlock Text="{Binding StatisticsAverageIterations, StringFormat={}{0:N2}}" FontSize="22" FontWeight="Bold" />
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+
+                            <Border Background="#FFF8E1" BorderBrush="#F1DEA0" BorderThickness="1"
+                                    CornerRadius="5" Padding="9" Margin="0,0,0,12">
+                                <TextBlock Text="{Binding StatisticsCaveat}" TextWrapping="Wrap" Foreground="#6B5B20" />
+                            </Border>
+
+                            <TextBlock Text="So sánh theo treatment"
+                                       FontSize="16" FontWeight="Bold" Foreground="#174EA6"
+                                       Margin="0,0,0,8" />
+                            <DataGrid ItemsSource="{Binding TreatmentStatistics}"
+                                      AutoGenerateColumns="False" IsReadOnly="True"
+                                      CanUserAddRows="False" HeadersVisibility="Column"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      MinHeight="105" Margin="0,0,0,12">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Treatment" Binding="{Binding Strategy}" Width="*" />
+                                    <DataGridTextColumn Header="Runs" Binding="{Binding Runs}" Width="65" />
+                                    <DataGridTextColumn Header="Eligible" Binding="{Binding AnalysisEligibleRuns}" Width="65" />
+                                    <DataGridTextColumn Header="Success" Binding="{Binding Successes}" Width="70" />
+                                    <DataGridTextColumn Header="Raw rate" Binding="{Binding SuccessRate, StringFormat={}{0:P1}}" Width="75" />
+                                    <DataGridTextColumn Header="Analysis rate" Binding="{Binding AnalysisSuccessRate, StringFormat={}{0:P1}}" Width="90" />
+                                    <DataGridTextColumn Header="Infra" Binding="{Binding InfrastructureFailures}" Width="55" />
+                                    <DataGridTextColumn Header="Retries" Binding="{Binding TotalApiRetries}" Width="60" />
+                                    <DataGridTextColumn Header="Failovers" Binding="{Binding TotalKeyFailovers}" Width="65" />
+                                    <DataGridTextColumn Header="Avg tokens" Binding="{Binding AverageTokens, StringFormat={}{0:N0}}" Width="90" />
+                                    <DataGridTextColumn Header="Avg API calls" Binding="{Binding AverageApiCalls, StringFormat={}{0:N2}}" Width="90" />
+                                    <DataGridTextColumn Header="Avg iterations" Binding="{Binding AverageIterations, StringFormat={}{0:N2}}" Width="95" />
+                                    <DataGridTextColumn Header="Final LOC" Binding="{Binding AverageChangedLines, StringFormat={}{0:N1}}" Width="75" />
+                                    <DataGridTextColumn Header="Regressions" Binding="{Binding TotalRegressions}" Width="85" />
+                                    <DataGridTextColumn Header="Measured" Binding="{Binding MeasurementsComplete}" Width="75" />
+                                    <DataGridTextColumn Header="Cov measured" Binding="{Binding CoverageMeasurementsComplete}" Width="90" />
+                                    <DataGridTextColumn Header="Mut measured" Binding="{Binding MutationMeasurementsComplete}" Width="90" />
+                                    <DataGridTextColumn Header="Token accounted" Binding="{Binding TokenAccountedRuns}" Width="105" />
+                                    <DataGridTextColumn Header="Coverage" Binding="{Binding AverageLineCoverageDisplay}" Width="80" />
+                                    <DataGridTextColumn Header="Mutation" Binding="{Binding AverageMutationScoreDisplay}" Width="80" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="18" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Token trung bình mỗi run (thanh tương đối)"
+                                               FontWeight="SemiBold" Margin="0,0,0,7" />
+                                    <ItemsControl ItemsSource="{Binding TreatmentStatistics}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="70" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Strategy}" VerticalAlignment="Center" />
+                                                    <ProgressBar Grid.Column="1" Maximum="100" Value="{Binding TokenBarPercent, Mode=OneWay}"
+                                                                 Height="16" Margin="6,0" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding AverageTokens, StringFormat={}{0:N0}}"
+                                                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Analysis success rate và mutation score"
+                                               FontWeight="SemiBold" Margin="0,0,0,7" />
+                                    <ItemsControl ItemsSource="{Binding TreatmentStatistics}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="58" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="58" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Strategy}" VerticalAlignment="Center" />
+                                                    <ProgressBar Grid.Column="1" Maximum="100" Value="{Binding AnalysisSuccessRatePercent, Mode=OneWay}"
+                                                                 Height="16" Foreground="#174EA6" Margin="6,0" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding AnalysisSuccessRate, StringFormat={}{0:P0}}"
+                                                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                                    <ProgressBar Grid.Column="3" Maximum="100" Value="{Binding MutationScorePercent, Mode=OneWay}"
+                                                                 Height="16" Foreground="#2E7D32" Margin="8,0,6,0" />
+                                                    <TextBlock Grid.Column="4" Text="{Binding MutationScoreDisplay}"
+                                                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </Grid>
+        </Grid>
+        </ScrollViewer>
+
+        <Border Grid.Row="1" Background="White" BorderBrush="#DADCE0"
+                BorderThickness="0,1,0,0" Padding="18,11">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Content="Dự toán batch"
+                            Command="{Binding EstimateBatchCommand}"
+                            Background="#F3F6FA"
+                            Foreground="#174EA6" />
+                    <Button Content="Tiền kiểm dataset"
+                            Command="{Binding PreflightCommand}"
+                            Background="#FFF8E1"
+                            Foreground="#7A4E00" />
+                    <Button Content="Nạp kết quả" Command="{Binding LoadResultsCommand}" />
+                    <Button Content="Xem thống kê"
+                            Click="ShowStatistics_OnClick"
+                            Background="#E8F0FE"
+                            Foreground="#174EA6" />
+                    <Button Content="Xóa kết quả" Command="{Binding ClearCommand}" />
+                    <Button Content="Hủy" Command="{Binding CancelCommand}" />
+                    <Button Content="Chạy thực nghiệm"
+                            Command="{Binding StartCommand}"
+                            Background="{StaticResource PrimaryBrush}"
+                            Foreground="White" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusText}"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               Margin="0,0,18,0" />
+                    <ProgressBar Width="230" Height="16"
+                                 Minimum="0"
+                                 Maximum="{Binding ExperimentProgressTotal, Mode=OneWay}"
+                                 Value="{Binding ExperimentProgressCompleted, Mode=OneWay}"
+                                 Foreground="#174EA6"
+                                 VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding ExperimentProgressText}"
+                               VerticalAlignment="Center"
+                               Foreground="#174EA6"
+                               FontWeight="SemiBold"
+                               Margin="10,0,0,0" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

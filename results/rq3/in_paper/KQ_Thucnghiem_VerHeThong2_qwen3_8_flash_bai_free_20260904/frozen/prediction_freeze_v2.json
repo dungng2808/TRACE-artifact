@@ -1,0 +1,15 @@
+{
+  "schema_version": "rq3-exploratory-v2-prediction-freeze",
+  "frozen_at": "2026-09-05T15:23:41.5541519+07:00",
+  "source_run": "predictions/RQ3_Batch_20260904_161220",
+  "predictions_file": "frozen/predictions_merged_v2.json",
+  "predictions_sha256": "903EA5372283281A89B01A501A45DC17ABFC1AF512BAC14D4480C20D694168A5",
+  "run_manifest_sha256": "D7A23C425B88B82DE92E2D821758561C2A7EBDDCDE84D8CFC6F076DAFCF0D37C",
+  "dataset_manifest_sha256": "8A29C26A701007C3008A291EC6C3240081B4D3DD56E96A07468718B90F154669",
+  "model": "qwen3.8-flash",
+  "endpoint": "https://api.b.ai/v1/chat/completions",
+  "prediction_rows": 219,
+  "invalid_outputs": 0,
+  "complete": true,
+  "excluded_prior_checkpoint": "R:/BaoVer2/ThucNgiem/KQ_Thucnghiem/KQ_Thucnghiem_VerHeThong2_qwen3_8_flash/predictions/RQ3_Batch_20260831_121007"
+}

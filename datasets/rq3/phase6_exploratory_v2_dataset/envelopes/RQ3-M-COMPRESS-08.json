@@ -1,0 +1,129 @@
+﻿{
+    "schema_version":  "rq3-evidence-envelope-v2",
+    "case_id":  "RQ3-M-COMPRESS-08",
+    "public_case":  {
+                        "schema_version":  "rq3-public-case-v2",
+                        "case_id":  "RQ3-M-COMPRESS-08",
+                        "split":  "MAIN",
+                        "repository":  {
+                                           "id":  "D4J-Compress-1f",
+                                           "project":  "Compress",
+                                           "repository_url":  "https://github.com/apache/commons-compress.git"
+                                       },
+                        "revision":  {
+                                         "revision_spec":  "1f",
+                                         "resolved_revision":  "004124ac5dbf5edbf925078652526267468821e7"
+                                     },
+                        "case_origin":  "CONTROLLED_INJECTION",
+                        "base_test":  {
+                                          "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                                          "source_kind":  "DEVELOPER",
+                                          "artifact_path":  "artifacts/case_variants/RQ3-M-COMPRESS-08.java",
+                                          "artifact_sha256":  "91cf605d2d4f057873f4e0958f9d1efebe81e7ebde201b5a07584e845a3d5a8c"
+                                      },
+                        "focal_mapping":  {
+                                              "candidate_class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                                              "candidate_method":  "CLASS_LEVEL",
+                                              "status":  "CONFIRMED"
+                                          },
+                        "scenario":  {
+                                         "summary":  "The test creates a CPIO archive with two XML files using ArchiveStreamFactory (which internally produces a CpioArchiveOutputStream), then unarchives it and asserts that the extracted files exist with expected lengths.",
+                                         "input_preconditions":  "Use the setup, arguments, fixtures, and state shown in generated_test.source_text for org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive.",
+                                         "expected_observation":  "The explicit assertions, expected exceptions, and state checks described by the declared scenario must be established by the generated test.",
+                                         "structural_target":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream"
+                                     },
+                        "status":  "READY_FOR_EXPLORATORY_V2"
+                    },
+    "generated_test":  {
+                           "language":  "java",
+                           "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                           "source_text":  "/*\n * Licensed to the Apache Software Foundation (ASF) under one\n * or more contributor license agreements.  See the NOTICE file\n * distributed with this work for additional information\n * regarding copyright ownership.  The ASF licenses this file\n * to you under the Apache License, Version 2.0 (the\n * \"License\"); you may not use this file except in compliance\n * with the License.  You may obtain a copy of the License at\n *\n * http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing,\n * software distributed under the License is distributed on an\n * \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n * KIND, either express or implied.  See the License for the\n * specific language governing permissions and limitations\n * under the License.\n */\npackage org.apache.commons.compress.archivers;\n\nimport java.io.File;\nimport java.io.FileInputStream;\nimport java.io.FileOutputStream;\nimport java.io.InputStream;\nimport java.io.OutputStream;\nimport java.util.HashMap;\nimport java.util.Map;\nimport org.apache.commons.compress.AbstractTestCase;\nimport org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;\nimport org.apache.commons.compress.utils.IOUtils;\n\npublic final class CpioTestCase extends AbstractTestCase {\n\n    public void testCpioArchiveCreation() throws Exception {\n        final File output = new File(dir, \"bla.cpio\");\n        final File file1 = getFile(\"test1.xml\");\n        final File file2 = getFile(\"test2.xml\");\n        final OutputStream out = new FileOutputStream(output);\n        final ArchiveOutputStream os = new ArchiveStreamFactory().createArchiveOutputStream(\"cpio\", out);\n        os.putArchiveEntry(new CpioArchiveEntry(\"test1.xml\", file1.length()));\n        IOUtils.copy(new FileInputStream(file1), os);\n        os.closeArchiveEntry();\n        os.putArchiveEntry(new CpioArchiveEntry(\"test2.xml\", file2.length()));\n        IOUtils.copy(new FileInputStream(file2), os);\n        os.closeArchiveEntry();\n        os.close();\n    }\n\n    public void testCpioUnarchive() throws Exception {\n        final File output = new File(dir, \"bla.cpio\");\n        {\n            final File file1 = getFile(\"test1.xml\");\n            final File file2 = getFile(\"test2.xml\");\n            final OutputStream out = new FileOutputStream(output);\n            final ArchiveOutputStream os = new ArchiveStreamFactory().createArchiveOutputStream(\"cpio\", out);\n            os.putArchiveEntry(new CpioArchiveEntry(\"test1.xml\", file1.length()));\n            IOUtils.copy(new FileInputStream(file1), os);\n            os.closeArchiveEntry();\n            os.putArchiveEntry(new CpioArchiveEntry(\"test2.xml\", file2.length()));\n            IOUtils.copy(new FileInputStream(file2), os);\n            os.closeArchiveEntry();\n            os.close();\n            out.close();\n        }\n        // Unarchive Operation\n        final File input = output;\n        final InputStream is = new FileInputStream(input);\n        final ArchiveInputStream in = new ArchiveStreamFactory().createArchiveInputStream(\"cpio\", is);\n        Map result = new HashMap();\n        ArchiveEntry entry = null;\n        while ((entry = in.getNextEntry()) != null) {\n            File target = new File(dir, entry.getName());\n            final OutputStream out = new FileOutputStream(target);\n            IOUtils.copy(in, out);\n            out.close();\n            result.put(entry.getName(), target);\n        }\n        in.close();\n        int lineSepLength = System.getProperty(\"line.separator\").length();\n        File t = (File) result.get(\"test1.xml\");\n        assertTrue(\"Expected \" + t.getAbsolutePath() + \" to exist\", t.exists());\n        assertEquals(\"length of \" + t.getAbsolutePath(), 72 + 4 * lineSepLength, t.length());\n        t = (File) result.get(\"test2.xml\");\n        assertTrue(\"Expected \" + t.getAbsolutePath() + \" to exist\", t.exists());\n        assertEquals(\"length of \" + t.getAbsolutePath(), 73 + 5 * lineSepLength, t.length());\n    }\n\n    private int rq3SharedInfrastructureFailure = RQ3_NONEXISTENT_SHARED_SYMBOL;\n}\n",
+                           "source_sha256":  "91CF605D2D4F057873F4E0958F9D1EFEBE81E7EBDE201B5A07584E845A3D5A8C",
+                           "materialized_from":  "source_artifact/RQ3-M-COMPRESS-08.java"
+                       },
+    "tool_evidence":  {
+                          "schema_version":  "rq3-tool-evidence-v2",
+                          "case_id":  "RQ3-M-COMPRESS-08",
+                          "repository":  {
+                                             "project":  "Compress",
+                                             "revision":  "1f",
+                                             "path":  "R:\\BaoVer2\\ThucNgiem\\RQ3_Phase2\\workspaces\\d4j_sources\\Compress-1f",
+                                             "toolchain":  "DEFECTS4J"
+                                         },
+                          "test_id":  "org.apache.commons.compress.archivers.CpioTestCase::testCpioUnarchive",
+                          "focal_class":  "org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream",
+                          "collected_at":  "2026-08-17T08:48:22.4870314+00:00",
+                          "tool_runs":  [
+                                            {
+                                                "phase":  "compile",
+                                                "status":  "FAIL",
+                                                "exit_code":  1,
+                                                "duration_ms":  27138,
+                                                "toolchain":  "DEFECTS4J",
+                                                "runner":  "docker",
+                                                "container_image":  "rq3-defects4j:3.0.1",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "stdout_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                                "stderr_sha256":  "01ECB1878CA0F836AA301561F36F0AD8EBD179681EB204D3F654F45D3694E407",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "junit",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "coverage",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            },
+                                            {
+                                                "phase":  "mutation",
+                                                "status":  "SKIPPED",
+                                                "reason":  "Compile failed; dependent tool was not run.",
+                                                "runner":  "docker",
+                                                "java_home":  "/usr/lib/jvm/java-11-openjdk-amd64",
+                                                "artifacts":  [
+
+                                                              ]
+                                            }
+                                        ],
+                          "coverage":  {
+                                           "target_reached":  "UNKNOWN",
+                                           "lines_total":  0,
+                                           "lines_covered":  0,
+                                           "conditions_total":  0,
+                                           "conditions_covered":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted focal-class coverage is unavailable."
+                                       },
+                          "mutation":  {
+                                           "live_mutant_count":  0,
+                                           "evidence_status":  "UNAVAILABLE",
+                                           "note":  "Targeted mutation evidence is unavailable.",
+                                           "relevance_disclosed":  false,
+                                           "surviving_mutants":  [
+
+                                                                 ]
+                                       },
+                          "diagnostics":  {
+                                              "compile":  "Running ant (compile)...................................................... OK\nRunning ant (compile.tests)................................................ FAIL\nExecuted command:  cd /work \u0026\u0026 /defects4j/major/bin/ant -f /defects4j/framework/projects/defects4j.build.xml -Dd4j.home=/defects4j -Dd4j.dir.projects=/defects4j/framework/projects -Dbasedir=/work  compile.tests 2\u003e\u00261\nBuildfile: /defects4j/framework/projects/defects4j.build.xml\n\ntest-offline:\n\nget-deps:\n\ncommons-compress-from-maven.compile:\n    [javac] /work/maven-build.xml:74: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n\ncompile:\n\ncommons-compress-from-maven.compile-tests:\n    [mkdir] Created dir: /work/target/test-classes\n    [javac] /work/maven-build.xml:107: warning: \u0027includeantruntime\u0027 was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds\n    [javac] Compiling 25 source files to /work/target/test-classes\n    [javac] warning: [options] bootstrap class path not set in conjunction with -source 6\n    [javac] warning: [options] source value 6 is obsolete and will be removed in a future release\n    [javac] warning: [options] target value 1.6 is obsolete and will be removed in a future release\n    [javac] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.\n    [javac] /work/src/test/java/org/apache/commons/compress/archivers/CpioTestCase.java:88: error: cannot find symbol\n    [javac]     private int rq3SharedInfrastructureFailure = RQ3_NONEXISTENT_SHARED_SYMBOL;\n    [javac]                                                  ^\n    [javac]   symbol:   variable RQ3_NONEXISTENT_SHARED_SYMBOL\n    [javac]   location: class CpioTestCase\n    [javac] /work/src/test/java/org/apache/commons/compress/archivers/zip/ZipLongTest.java:71: warning: [deprecation] Integer(int) in Integer has been deprecated\n    [javac]         assertTrue(\"non ZipLong handling\", !zl.equals(new Integer(0x1234)));\n    [javac]                                                       ^\n    [javac] /work/src/test/java/org/apache/commons/compress/archivers/zip/ZipShortTest.java:69: warning: [deprecation] Integer(int) in Integer has been deprecated\n    [javac]         assertTrue(\"non ZipShort handling\", !zs.equals(new Integer(0x1234)));\n    [javac]                                                        ^\n    [javac] Note: Some input files use unchecked or unsafe operations.\n    [javac] Note: Recompile with -Xlint:unchecked for details.\n    [javac] 1 error\n    [javac] 6 warnings\n\nBUILD FAILED\n/work/maven-build.xml:107: Compile failed; see the compiler error output for details.\n\nTotal time: 10 seconds\nCannot compile tests! at /defects4j/framework/bin/d4j/d4j-compile line 83.\nCompilation failed in require at /defects4j/framework/bin/defects4j line 195.\n",
+                                              "junit":  "",
+                                              "coverage":  "",
+                                              "mutation":  ""
+                                          }
+                      },
+    "note":  "No private gold, injection operator, or relevance adjudication is included."
+}
